@@ -19,8 +19,7 @@ class UsersEndpointTest(TestCase):
     def test_create_student(self):
         post_data = {
             'username': 'testuser',
-            'first_name': 'first',
-            'last_name': 'last',
+            'full_name': 'Jan Kowalski',
             'password': 'pass',
             'type': 0,
         }
