@@ -8,6 +8,11 @@ from users.serializers import UserSerializer
 User = get_user_model()
 
 
-class UserViewset(CreateModelMixin, ListModelMixin, GenericViewSet):
+class StudentsViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = User.objects.filter(type=User.Type.STUDENT)
+
+
+class TutorsViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.filter(type=User.Type.TUTOR)

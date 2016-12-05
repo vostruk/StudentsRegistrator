@@ -28,6 +28,9 @@ class User(AbstractUser):
     def is_student(self):
         return self.type == User.Type.STUDENT
 
+    def is_tutor(self):
+        return self.type == User.Type.TUTOR
+
     def is_admin(self):
         return self.type == User.Type.ADMIN
 
