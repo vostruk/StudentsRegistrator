@@ -34,6 +34,15 @@ class CourseViewSet(ModelViewSet):
     queryset = Course.objects.prefetch_related('registered_students').all()
     permission_classes = (CoursesPermissions,)
 
+    def get_queryset(self):
+        registered = self.request.query_params.get('registered', None)
+        if registered is not None:
+            return self.request.user.courses_attended
+        tutored = self.request.query_params.get('tutored', None)
+        if tutored is not None:
+            return self.request.user.courses_taught
+        return Course.objects.prefetch_related('registered_students').all()
+
     @detail_route(['PUT', 'DELETE'], permission_classes=[StudentsOnlyPermissions])
     def registration(self, request, pk):
         course = self.get_object()
