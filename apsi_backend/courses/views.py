@@ -47,6 +47,11 @@ class CourseViewSet(ModelViewSet):
     def registration(self, request, pk):
         course = self.get_object()
         user = request.user
+        if user.is_student() and course.state != Course.State.REGISTRATION_OPENED:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': 'Course must have an open registration'}
+            )
         if request.method == 'PUT':
             course.registered_students.add(user)
         if request.method == 'DELETE':

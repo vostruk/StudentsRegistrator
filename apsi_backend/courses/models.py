@@ -5,11 +5,21 @@ from users.models import User
 
 
 class Course(models.Model):
+    class State:
+        REGISTRATION_OPENED = 0
+        STUDENTS_LIST_ACCEPTED = 1
+
+    STATE_CHOICES = (
+        (State.REGISTRATION_OPENED, 'Rejestracja otwarta'),
+        (State.STUDENTS_LIST_ACCEPTED, 'Lista studentdów zaakceptowana'),
+    )
+
     code = models.CharField(max_length=10, primary_key=True)
     name = models.CharField(max_length=100)
     syllabus = models.TextField()
     tutor = models.ForeignKey(User, related_name='courses_taught')
     registered_students = models.ManyToManyField(User, related_name='courses_attended')
+    state = models.IntegerField(choices=STATE_CHOICES, default=State.REGISTRATION_OPENED)
 
     def clean(self):
         if not self.tutor.is_tutor():
