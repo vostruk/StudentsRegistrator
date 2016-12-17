@@ -30,3 +30,7 @@ class Course(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+    
+    def register_student(self, some_student ):
+        if some_student.is_student():
+            self.registered_students.add(some_student)
