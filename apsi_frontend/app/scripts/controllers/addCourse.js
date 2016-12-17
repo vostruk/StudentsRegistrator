@@ -4,11 +4,7 @@
 'use strict';
 
 angular.module('apsiFrontendApp')
-	.controller('AddCourseCtrl', function($scope, $state, coursename, Restangular) {
-		var courseData = {
-			name : coursename
-		};
-		$scope.coursename = coursename;
+	.controller('AddCourseCtrl', function($scope, $state, Restangular) {
 
     $scope.addCourse = function () {
         var loginData = {
@@ -33,6 +29,6 @@ angular.module('apsiFrontendApp')
 
     $scope.cancelEdit = function () {
          $state.go('coursesDispl');
-    }
+    };
 
 	});
