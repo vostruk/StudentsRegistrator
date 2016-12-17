@@ -15,26 +15,51 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ui.router'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
+  .config(function ($stateProvider,  $urlRouterProvider) {
+    var mainState = {
+        name : 'main' ,
+        url :'/', 
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl',
-        controllerAs: 'about'
-      })
-      .when('/login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl',
-        controllerAs: 'login'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
+        controller: 'MainCtrl'
+    };
+
+    var aboutState = {
+      name : 'about',
+      url : '/about',
+      template : '<h2>About</h2>'
+    }; 
+
+  
+    var courseEditState = {
+        name : 'courseedit',
+        url : '/course/{courseid}',
+        templateUrl: 'views/course.html',
+        controller: 'CourseCtrl as course', 
+        resolve : {
+          coursename : function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
+    var ownerCourseEditState = {
+        name : 'ownerChange',
+        url : '/course/{courseid}/owner',
+        templateUrl: 'views/owner.html',
+        controller: 'OwnerCtrl as owner', 
+        resolve : {
+          coursename : function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
+    
+    $stateProvider.state(aboutState);
+    $stateProvider.state(courseEditState);
+    $stateProvider.state(mainState);
+    $stateProvider.state(ownerCourseEditState);
+
+    $urlRouterProvider.otherwise('/');
   });
