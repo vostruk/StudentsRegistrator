@@ -24,8 +24,8 @@ class Course(models.Model):
     def clean(self):
         if not self.tutor.is_tutor():
             raise ValidationError("Course tutor can't be student or admin")
-        if not all(student.is_student() for student in self.registered_students.all()):
-            raise ValidationError("Only students can be registered to a course")
+        # if not all(student.is_student() for student in self.registered_students.all()):
+        #     raise ValidationError("Only students can be registered to a course")
 
     def save(self, *args, **kwargs):
         self.full_clean()

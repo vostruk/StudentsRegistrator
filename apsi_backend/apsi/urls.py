@@ -25,7 +25,7 @@ from courses.views import CourseViewSet
 router = DefaultRouter()
 router.register(r'students', StudentsViewSet, base_name='students')
 router.register(r'tutors', TutorsViewSet, base_name='tutors')
-router.register(r'courses', CourseViewSet)
+router.register(r'courses', CourseViewSet, base_name='course')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

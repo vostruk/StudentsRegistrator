@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route
+from rest_framework.exceptions import PermissionDenied
 
 from courses.serializers import CourseSerializer
 from courses.models import Course
@@ -31,7 +32,6 @@ class StudentsOnlyPermissions(IsAuthenticated):
 
 class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
-    queryset = Course.objects.prefetch_related('registered_students').all()
     permission_classes = (CoursesPermissions,)
 
     def get_queryset(self):
@@ -42,6 +42,24 @@ class CourseViewSet(ModelViewSet):
         if tutored is not None:
             return self.request.user.courses_taught
         return Course.objects.prefetch_related('registered_students').all()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # refresh the instance from the database.
+            try:
+                instance = self.get_object()
+            except PermissionDenied:
+                pass  # ignore permission denied exception at this point
+            serializer = self.get_serializer(instance)
+
+        return Response(serializer.data)
 
     @detail_route(['PUT', 'DELETE'], permission_classes=[StudentsOnlyPermissions])
     def registration(self, request, pk):

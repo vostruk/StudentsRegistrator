@@ -1,39 +1,53 @@
 'use strict';
 
 angular.module('apsiFrontendApp')
-	.controller('CourseCtrl', function($scope, $state, coursename, Restangular) {
+	.controller('CourseCtrl', function($scope, $state, coursename, Restangular,$filter) {
 
+    function findBySpecField(data, value) {
+    var container = data;
 
+    for (var i = 0; i < container.length; i++) {
+      console.log('    '+container[i].id);
+        if (container[i].id == value) {
+            console.log('+++'+container[i].full_name);
+            return(container[i]);
+        }
+    }
+    return '';
+}
 
 		console.log('Nazwa kursu ' + coursename);
-    Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/').get(coursename)  // GET: /courses/{name}
+    Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/').get()  // GET: /courses/{name}
 			.then(function(course) {
         console.log('Wynik ' + course.code);
-			  $scope.courseDesc = course; // first Restangular obj in list: { id: 123 }
+			  $scope.courseDesc = course;
         $scope.courseData = $scope.courseDesc;
+        console.log('Wynikk ' + $scope.courseDesc.tutor);
      	});
 
 
-    Restangular.oneUrl('courses', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}
+    Restangular.oneUrl('coursesdd', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}
 			.then(function(tutors) {
         console.log('Tutorzy ' + tutors);
 			  $scope.tutors = tutors;
-        $scope.courseDescSelectedTutor = tutors[0];
-
+        $scope.courseDescSelectedTutor = findBySpecField(tutors, $scope.courseData.tutor);
+        console.log('Znalezione' + $scope.courseDescSelectedTutor.id);
      	});
 
 		$scope.saveCourse = function() {
-
       var loginData = {
             code: $scope.courseData.code,
             name: $scope.courseDesc.name,
             syllabus: $scope.courseDesc.syllabus,
-            tutor: 7,
-            registered: $scope.courseData.registered,
-            state: $scope.courseData.state
+            tutor: $scope.courseDescSelectedTutor.id,
+            registered: null,
+            state: 0
         };
-        console.log(loginData.code);
-        Restangular.oneUrl('asdd','http://localhost:8000/courses/'+$scope.courseData.code+'/').patch(loginData).then(
+      console.log(loginData.code);
+      console.log(loginData.name);
+      console.log(loginData.syllabus);
+      console.log($scope.courseDesc.registered);
+        Restangular.oneUrl('asdda','http://localhost:8000/courses/'+$scope.courseData.code+'/').patch(loginData).then(
             function()
             {
               console.log('Updated:  ' +loginData.name +loginData.code);
