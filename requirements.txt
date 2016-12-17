@@ -1,3 +1,4 @@
 django==1.10.3
 djangorestframework==3.5.2
 django-extensions
+django-cors-headers
