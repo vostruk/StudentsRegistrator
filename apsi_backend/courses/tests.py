@@ -49,9 +49,21 @@ class CoursesEndpointTest(TestCase):
             'type': 0,
         }
         response = self.client.post(reverse('students-list'), post_data, format='json')
+        
+        self.client.logout()
+        self.client.login(username='student1', password='pass')
+        register_data = {
+            'code': 'APSI',
+            'name': 'Analiza i projektowanie systemow',
+            'syllabus': 'Super scrum + classes waterfall',
+            'state': 0,
+        }
 
+        response = self.client.put(reverse('course-registration',kwargs={'pk':'APSI'}), post_data, format='json')
+        #self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         #register student
         created_student = User.objects.get(username="student1")
+        
         created_course.register_student(created_student)
         self.assertEqual(created_course.tutor, self.tutor_user)
         self.assertEqual(created_course.registered_students.count(), 1)
