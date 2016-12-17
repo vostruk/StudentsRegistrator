@@ -6,3 +6,10 @@ How to set-up backend server (Linux):
 5. Run tests `./manage.py test`
 6. Run migrations `./manage.py migrate`
 6. Run server `./manage.py runserver`
+
+How to set-up frontend:
+1. Make sure grunt is installed and npm is updated
+2. Install dependencies (in apsi_frontend folder) 'npm install'
+3. Build grunt 'grunt'
+4. Run grunt 'grunt serve' (use --force if something goes wrong)
+5. localhost:9000 will be opened

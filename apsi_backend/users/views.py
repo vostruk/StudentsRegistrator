@@ -16,3 +16,4 @@ class StudentsViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
 class TutorsViewSet(CreateModelMixin, ListModelMixin, GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.filter(type=User.Type.TUTOR)
+   

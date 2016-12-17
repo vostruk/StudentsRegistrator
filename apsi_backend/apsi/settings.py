@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_docs',
     'users',
     'courses',
 ]
@@ -123,7 +124,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
+REST_FRAMEWORK_DOCS = {
+    'HIDE_DOCS': False  # Default: False
+}
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
