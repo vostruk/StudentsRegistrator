@@ -21,15 +21,6 @@ angular
     'restangular'
   ])
   .config(function ($stateProvider,  $urlRouterProvider) {
-<<<<<<< HEAD
-=======
-    var mainState = {
-        name : 'main' ,
-        url :'/',
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
-    };
->>>>>>> 9c5081716c1dab91dc28a9de30b2d255dbfe5b09
 
     var aboutState = {
       name : 'about',
@@ -69,7 +60,6 @@ angular
         }
     };
 
-<<<<<<< HEAD
     var loginState = {
       name : 'login',
       url : '/login',
