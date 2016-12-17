@@ -25,12 +25,12 @@ from courses.views import CourseViewSet
 router = DefaultRouter()
 router.register(r'students', StudentsViewSet)
 router.register(r'tutors', TutorsViewSet)
-router.register(r'courses', CourseViewSet)
+router.register(r'courses', CourseViewSet, base_name='course')
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', obtain_auth_token),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
 
 urlpatterns += router.urls
