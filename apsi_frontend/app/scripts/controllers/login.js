@@ -4,7 +4,6 @@ angular.module('apsiFrontendApp')
 	.controller('LoginCtrl', function($scope, Restangular, LoggedInRestangular) {
 		  $scope.out = '';
 		  $scope.getCred = function() {
-		  	 $scope.out = 'Nice click';
 		  	 var loginData = {
 		  	 	username : $scope.username,
 		  	 	password : $scope.password
@@ -20,6 +19,7 @@ angular.module('apsiFrontendApp')
 			  	$scope.out = 'Cannot log';
 			    console.log('Cannot log into system');
 			  });
+		  
     	//	$scope.quantityResult = calculateService.calculate($scope.quantity, 10);
   		};
 	});

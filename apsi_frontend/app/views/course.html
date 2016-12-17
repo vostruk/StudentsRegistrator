@@ -1,21 +1,23 @@
 <div>
-	<h2>Edit {{courseData.name}}</h2>
+	<h2>Edit {{courseDesc.code}}</h2>
 
 	<form>
 		<div class="form-group">
+			<form>
 			<div class="form-group">
 				<label for="nameInput">Course name</label>
-    			<input type="text" class="form-control" id="nameInput" placeholder="Course name">
+    			<input type="text" class="form-control" id="nameInput" placeholder="Course name" ng-model="courseDesc.name">
 			</div>
 
 			<div class="form-group">
 				<label for="descInput">Description</label>
-    			<textarea class="form-control" id="descInput" placeholder="Description" rows=5> </textarea>
+    			<textarea class="form-control" id="descInput" placeholder="Description" rows=5 ng-model="courseDesc.syllabus"> </textarea>
 			</div>
 			<div align="right">
 				 <button type="submit" class="btn btn-default">Cancel</button>
-				 <button type="submit" class="btn btn-primary">Save</button>
+				 <button type="submit" class="btn btn-primary" ng-click="saveCourse()">Save</button>
 			</div>
+			</form>
 			<div class="form-group">
 				<label for="descInput">Owner</label>
     			<input type="text" class="form-control" id="nameInput" placeholder="Owner" disabled>

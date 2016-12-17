@@ -3,16 +3,25 @@
 angular.module('apsiFrontendApp')
 	.controller('CourseCtrl', function($scope, coursename, Restangular) {
 		var courseData = {
-			name : coursename
+			code : coursename
 		};
-		$scope.coursename = coursename;
+		
 		$scope.courseData = courseData;
+		console.log('Nazwa kursu ' + coursename);
 		//$scope.coursename = courseData;
      	// $scope.params = $routeParams;
-     	Restangular.allUrl('courses', 'http://localhost:8000/courses/').getList()  // GET: /courses
-			.then(function(courses) {
+     	Restangular.oneUrl('courses', 'http://localhost:8000/courses/').get(coursename)  // GET: /courses/{name}
+			.then(function(course) {
 			  // returns a list of users
-			  $scope.corusesDesc = courses; // first Restangular obj in list: { id: 123 }
-		});
+			   console.log('Wynik ' + course.code);
+			  $scope.courseDesc = course; // first Restangular obj in list: { id: 123 }
+     	});
+
+		$scope.saveCourse = function() {
+			Restangular.oneUrl('courses', 'http://localhost:8000/courses/').patch(coursename, { name : $scope.courseDesc.name, syllabus : $scope.courseDesc.syllabus })  // POST: /courses/{name}
+			.then(function() {
+			 /// $state.go('login');
+     	});
+		};
 
 	});
