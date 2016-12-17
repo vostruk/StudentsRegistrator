@@ -23,8 +23,8 @@ from courses.views import CourseViewSet
 
 
 router = DefaultRouter()
-router.register(r'students', StudentsViewSet)
-router.register(r'tutors', TutorsViewSet)
+router.register(r'students', StudentsViewSet, base_name='students')
+router.register(r'tutors', TutorsViewSet, base_name='tutors')
 router.register(r'courses', CourseViewSet)
 
 urlpatterns = [
