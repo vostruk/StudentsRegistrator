@@ -4,42 +4,35 @@
 'use strict';
 
 angular.module('apsiFrontendApp')
-	.controller('CoursesCtrl', function($http, $scope) {
+	.controller('CoursesCtrl', function($http, $scope, $state, $stateParams) {
 
-		$http.get('http://localhost:8000/courses/',{
-      headers: {'Authorization': 'Token token=1887d746a393ab9193712d74b8ae37aacb14c15d'}
-    }).success(function (response) {
-        console.log(response);
-        $scope.records = response.data.records;
+		$http.get('http://localhost:8000/courses/?tutored=true').then(function (response) {
+        console.log(response.data);
+        $scope.records = response.data;
       });
 
-
-
-    // var c1= {
-    //     "code": "apsi",
-    //     "name": "Ap SI",
-    //     "syllabus": "bardzo fajny opis",
-    //     "tutor": 3,
-    //     "registered": null,
-    //     "state": 0
-    // };
-    //
-    // var c2= {
-    //     "code": "MED",
-    //     "name": "ME Ddddd",
-    //     "syllabus": "asdasdasdasdasdasdasdas",
-    //     "tutor": 3,
-    //     "registered": null,
-    //     "state": 0
-    // };
-    //
-    // $scope.records = [c1,c2];
 
     $scope.detailClick = function (id) {
       console.log(id+' redirect to detail');
     };
 
     $scope.editClick = function (id) {
-      console.log(id+' redirect to detail');
+      console.log(id+' redirect to edit');
+      $state.go('courseedit', {courseid:id});
+    };
+
+    $scope.addClick = function () {
+      console.log(' redirect to add');
+      $state.go('addcourse');
+    };
+    $scope.deleteClick = function (id) {
+      console.log(id+' redirect to delete');
+      $http.delete('http://localhost:8000/courses/'+id+'/').then(function () {
+        $state.transitionTo($state.current, $stateParams, {
+            reload: true,
+            inherit: false,
+            notify: true
+        });
+      });
     };
 	});

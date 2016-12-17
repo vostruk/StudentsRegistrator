@@ -22,6 +22,13 @@ angular
   ])
   .config(function ($stateProvider,  $urlRouterProvider) {
 
+    // var mainState = {
+    //     name : 'main' ,
+    //     url :'/',
+    //     templateUrl: 'views/main.html',
+    //     controller: 'MainCtrl'
+    // };
+
     var aboutState = {
       name : 'about',
       url : '/about',
@@ -40,12 +47,24 @@ angular
           }
         }
     };
+    
+    var AddCourseState = {
+        name : 'addcourse',
+        url : '/addcourse/{courseid}',
+        templateUrl: 'views/addCourse.html',
+        controller: 'AddCourseCtrl as managecourse',
+        resolve : {
+          coursename : function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
 
     var coursesDisplayState = {
         name : 'coursesDispl',
         url : '/courses/',
         templateUrl: 'views/courses.html',
-        controller: 'CoursesCtrl as course'
+        controller: 'CoursesCtrl as courses'
     };
 
     var ownerCourseEditState = {
@@ -66,8 +85,8 @@ angular
       templateUrl : 'views/login.html',
       controller : 'LoginCtrl'
     };
-    
 
+    $stateProvider.state(AddCourseState);
     $stateProvider.state(aboutState);
     $stateProvider.state(courseEditState);
     $stateProvider.state(ownerCourseEditState);
