@@ -10,6 +10,7 @@ How to set-up backend server (Linux):
 How to set-up frontend:
 1. Make sure grunt is installed and npm is updated
 2. Install dependencies (in apsi_frontend folder) 'npm install --save-dev'
+3. Install dependencies by bower 'bower install'
 3. Build grunt 'grunt'
 4. Run grunt 'grunt serve' (use --force if something goes wrong)
 5. localhost:9000 will be opened
