@@ -11,6 +11,8 @@ How to set-up frontend:
 1. Make sure grunt is installed and npm is updated
 2. Install dependencies (in apsi_frontend folder) 'npm install --save-dev'
 3. Install dependencies by bower 'bower install'
-4. Build grunt 'grunt'
-5. Run grunt 'grunt serve' (use --force if something goes wrong)
-6. localhost:9000 will be opened
+4. Run 'bower update'
+5. Run 'sudo npm install grunt-karma --save-dev'
+6. Build grunt 'grunt'
+7. Run grunt 'grunt serve' (use --force if something goes wrong)
+8. localhost:9000 will be opened
