@@ -36,11 +36,16 @@ class CourseViewSet(ModelViewSet):
 
     def get_queryset(self):
         registered = self.request.query_params.get('registered', None)
-        if registered is not None:
+        if registered == 'true':
             return self.request.user.courses_attended
+        if registered == 'false':
+            return Course.objects.exclude(registered_students__pk=self.request.user.pk)
+
         tutored = self.request.query_params.get('tutored', None)
-        if tutored is not None:
+        if tutored == 'true':
             return self.request.user.courses_taught
+        if tutored == 'false':
+            return Course.objects.exclude(tutor__pk=self.request.user.pk)
         return Course.objects.prefetch_related('registered_students').all()
 
     def update(self, request, *args, **kwargs):
