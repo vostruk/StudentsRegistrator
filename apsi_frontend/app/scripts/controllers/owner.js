@@ -1,10 +1,10 @@
 'use strict';
 
 angular.module('apsiFrontendApp')
-	.controller('OwnerCtrl', function($scope, coursename) {
+	.controller('OwnerCtrl', function($scope, courseCode) {
 		$scope.courseData = 
 		{
-			name : coursename
+			name : courseCode
 		};
 
 		$scope.teachers = [
@@ -24,6 +24,4 @@ angular.module('apsiFrontendApp')
 				lastname : 'Nowak'
 			}
 		];
-		//$scope.coursename = courseData;
-     	// $scope.params = $routeParams;
 	});

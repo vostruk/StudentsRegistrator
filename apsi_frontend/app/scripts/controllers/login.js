@@ -13,8 +13,8 @@ angular.module('apsiFrontendApp')
 		  	  {
 		  	  	console.log('You are logged your tokes is :', response.token);
 		  	  	$scope.out = 'Yoy are logged as ' + $scope.username;
-		  	  	LoggedInRestangular.init(response.token);
-            $state.go('coursesDispl');
+		  	  	LoggedInRestangular.set(response.token);
+            	$state.go('coursesDispl');
 			  },
 			  function() {
 			  	$scope.out = 'Cannot log';

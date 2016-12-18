@@ -38,7 +38,7 @@ angular
 
     var courseEditState = {
         name : 'courseedit',
-        url : '/course/{courseid}',
+        url : '/courses/{courseid}',
         templateUrl: 'views/course.html',
         controller: 'CourseCtrl as course',
         resolve : {
@@ -62,18 +62,18 @@ angular
 
     var coursesDisplayState = {
         name : 'coursesDispl',
-        url : '/courses/',
+        url : '/courses',
         templateUrl: 'views/courses.html',
         controller: 'CoursesCtrl as courses'
     };
 
     var ownerCourseEditState = {
         name : 'ownerChange',
-        url : '/course/{courseid}/owner',
+        url : '/courses/{courseid}/owner',
         templateUrl: 'views/owner.html',
         controller: 'OwnerCtrl as owner',
         resolve : {
-          coursename : function($stateParams) {
+          courseCode   : function($stateParams) {
             return $stateParams.courseid;
           }
         }
@@ -86,12 +86,28 @@ angular
       controller : 'LoginCtrl'
     };
 
+    var studentListState = {
+      name : 'studentList',
+      url : '/courses/{courseid}/students',
+      templateUrl : 'views/studentList.html',
+      controller : 'StudentListCtrl',
+      resolve : {
+          courseCode : function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
+
     $stateProvider.state(AddCourseState);
     $stateProvider.state(aboutState);
     $stateProvider.state(courseEditState);
     $stateProvider.state(ownerCourseEditState);
     $stateProvider.state(loginState);
     $stateProvider.state(coursesDisplayState);
+    $stateProvider.state(studentListState);
+
 
     $urlRouterProvider.otherwise('/login');
+
+
   });
