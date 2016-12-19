@@ -39,7 +39,7 @@ angular
     var courseEditState = {
         name : 'courseedit',
         url : '/courses/{courseid}',
-        templateUrl: 'views/course.html',
+        templateUrl: 'scripts/components/course/course.html',
         controller: 'CourseCtrl as course',
         resolve : {
           coursename : function($stateParams) {
@@ -51,7 +51,7 @@ angular
     var AddCourseState = {
         name : 'addcourse',
         url : '/addcourse/{courseid}',
-        templateUrl: 'views/addCourse.html',
+        templateUrl: 'scripts/components/addCourse/addCourse.html',
         controller: 'AddCourseCtrl as managecourse',
         resolve : {
           coursename : function($stateParams) {
@@ -63,33 +63,21 @@ angular
     var coursesDisplayState = {
         name : 'coursesDispl',
         url : '/courses',
-        templateUrl: 'views/courses.html',
+        templateUrl: 'scripts/components/coursesList/courses.html',
         controller: 'CoursesCtrl as courses'
-    };
-
-    var ownerCourseEditState = {
-        name : 'ownerChange',
-        url : '/courses/{courseid}/owner',
-        templateUrl: 'views/owner.html',
-        controller: 'OwnerCtrl as owner',
-        resolve : {
-          courseCode   : function($stateParams) {
-            return $stateParams.courseid;
-          }
-        }
     };
 
     var loginState = {
       name : 'login',
       url : '/login',
-      templateUrl : 'views/login.html',
+      templateUrl : 'scripts/components/login/login.html',
       controller : 'LoginCtrl'
     };
 
     var studentListState = {
       name : 'studentList',
       url : '/courses/{courseid}/students',
-      templateUrl : 'views/studentList.html',
+      templateUrl : 'scripts/components/studentList/studentList.html',
       controller : 'StudentListCtrl',
       resolve : {
           courseCode : function($stateParams) {
@@ -101,7 +89,6 @@ angular
     $stateProvider.state(AddCourseState);
     $stateProvider.state(aboutState);
     $stateProvider.state(courseEditState);
-    $stateProvider.state(ownerCourseEditState);
     $stateProvider.state(loginState);
     $stateProvider.state(coursesDisplayState);
     $stateProvider.state(studentListState);

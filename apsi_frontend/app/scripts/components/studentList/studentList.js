@@ -13,14 +13,14 @@ angular.module('apsiFrontendApp')
     	Restangular.oneUrl('asd','http://localhost:8000/').get('courses/',courseCode).then(
     		function(response)
     		{	
-    			$scope.listIsOpen = !response.state;
+    			$scope.listIsOpen = response.state == 0;
     			if($scope.listIsOpen)
     			{
-    				closingButtonText = 'Close list';
+					$scope.closingButtonText = 'Close list';
     			}
     			else
     			{
-    				closingButtonText = 'Open list';
+					$scope.closingButtonText = 'Open list';
     			}
     		},
     		function()
@@ -36,7 +36,7 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.close = function() {
-    	Restangular.oneUrl('asd','http://localhost:8000/courses/' + courseCode + '/').patch({state : !$scope.listIsOpen}).then(
+    	Restangular.oneUrl('asd','http://localhost:8000/courses/' + courseCode + '/').patch({state : Number(!$scope.listIsOpen)}).then(
     	function() 
     	{
     		$scope.refresh();

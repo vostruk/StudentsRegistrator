@@ -14,9 +14,9 @@
     			<textarea class="form-control" id="descInput" placeholder="Description" rows=5 ng-model="courseDesc.syllabus"> </textarea>
 			</div>
 			<div>
-        <select ng-options='o.full_name for o in tutors' ng-model="courseDescSelectedTutor"></select>
+        <select  class="form-control" ng-options='o.full_name for o in tutors' ng-model="courseDescSelectedTutor"></select>
       </div>
-        <div align="right">
+        <div align="right" style="padding-top: 10px">
 				 <button type="submit" class="btn btn-default">Cancel</button>
 				 <button type="submit" class="btn btn-primary" ng-click="saveCourse()">Save</button>
       </div>
