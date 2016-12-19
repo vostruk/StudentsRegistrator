@@ -5,8 +5,9 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import PermissionDenied
 
-from courses.serializers import CourseSerializer
+from courses.serializers import CourseSerializer, RegisteredStudentsSerializer
 from courses.models import Course
+from users.serializers import UserSerializer
 
 
 class CoursesPermissions(IsAuthenticated):
@@ -36,11 +37,16 @@ class CourseViewSet(ModelViewSet):
 
     def get_queryset(self):
         registered = self.request.query_params.get('registered', None)
-        if registered is not None:
+        if registered == 'true':
             return self.request.user.courses_attended
+        if registered == 'false':
+            return Course.objects.exclude(registered_students__pk=self.request.user.pk)
+
         tutored = self.request.query_params.get('tutored', None)
-        if tutored is not None:
+        if tutored == 'true':
             return self.request.user.courses_taught
+        if tutored == 'false':
+            return Course.objects.exclude(tutor__pk=self.request.user.pk)
         return Course.objects.prefetch_related('registered_students').all()
 
     def update(self, request, *args, **kwargs):
@@ -75,3 +81,23 @@ class CourseViewSet(ModelViewSet):
         if request.method == 'DELETE':
             course.registered_students.remove(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @detail_route(['GET', 'POST', 'DELETE'])
+    def registered_students(self, request, pk):
+        course = self.get_object()
+        if request.method == 'GET':
+            response_serializer = UserSerializer(course.registered_students.all(), many=True)
+            return Response(response_serializer.data)
+
+        students_serializer = RegisteredStudentsSerializer(data=request.data)
+        students_serializer.is_valid(raise_exception=True)
+        students = students_serializer.validated_data['students']
+
+        if request.method == 'POST':
+            course.registered_students.add(*students)
+        if request.method == 'DELETE':
+            course.registered_students.remove(*students)
+
+        course = self.get_object()
+        response_serializer = UserSerializer(course.registered_students.all(), many=True)
+        return Response(response_serializer.data)

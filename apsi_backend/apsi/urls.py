@@ -18,7 +18,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
-from users.views import StudentsViewSet, TutorsViewSet
+from users.views import StudentsViewSet, TutorsViewSet, me
 from courses.views import CourseViewSet
 
 
@@ -28,6 +28,7 @@ router.register(r'tutors', TutorsViewSet, base_name='tutors')
 router.register(r'courses', CourseViewSet, base_name='course')
 
 urlpatterns = [
+    url(r'me/', me),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', obtain_auth_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),

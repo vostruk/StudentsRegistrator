@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from courses.models import Course
+from users.models import User
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -15,7 +16,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance, validated_data):
-        del validated_data['code']  # code can't be updated
+        validated_data.pop('code', None)  # code can't be updated
         return super().update(instance, validated_data)
 
     def get_registered(self, course):
@@ -23,3 +24,7 @@ class CourseSerializer(serializers.ModelSerializer):
         if not user.is_student():
             return None
         return user in course.registered_students.all()
+
+
+class RegisteredStudentsSerializer(serializers.Serializer):
+    students = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(type=User.Type.STUDENT), many=True)
