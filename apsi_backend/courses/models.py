@@ -34,3 +34,18 @@ class Course(models.Model):
     def register_student(self, some_student ):
         if some_student.is_student():
             self.registered_students.add(some_student)
+
+
+class ClassType(models.Model):
+    course = models.ForeignKey(Course)
+    name = models.CharField(max_length=50)
+
+
+class Group(models.Model):
+    class_type = models.ForeignKey(ClassType)
+    student_members = models.ManyToManyField(User)
+
+
+class TimeSlot(models.Model):
+    class_type = models.ForeignKey(ClassType)
+    enrolled_students = models.ManyToManyField(User)

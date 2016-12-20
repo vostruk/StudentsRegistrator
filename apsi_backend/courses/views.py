@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import PermissionDenied
 
-from courses.serializers import CourseSerializer, RegisteredStudentsSerializer
-from courses.models import Course
+from courses.serializers import CourseSerializer, RegisteredStudentsSerializer, ClassTypeSerializer
+from courses.models import Course, ClassType
 from users.serializers import UserSerializer
 
 
@@ -101,3 +101,13 @@ class CourseViewSet(ModelViewSet):
         course = self.get_object()
         response_serializer = UserSerializer(course.registered_students.all(), many=True)
         return Response(response_serializer.data)
+
+
+class ClassTypeViewSet(ModelViewSet):
+    serializer_class = ClassTypeSerializer
+
+    def get_queryset(self):
+        return ClassType.objects.filter(course_id=self.kwargs['course_pk'])
+
+    def perform_create(self, serializer):
+        serializer.save(course_id=self.kwargs['course_pk'])

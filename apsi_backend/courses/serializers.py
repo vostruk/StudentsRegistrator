@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from courses.models import Course
+from courses.models import Course, ClassType, Group
 from users.models import User
 
 
@@ -28,3 +28,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
 class RegisteredStudentsSerializer(serializers.Serializer):
     students = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(type=User.Type.STUDENT), many=True)
+
+
+class ClassTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClassType
+        fields = ('id', 'name',)

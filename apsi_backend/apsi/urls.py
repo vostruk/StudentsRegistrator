@@ -16,16 +16,23 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
+from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
 from users.views import StudentsViewSet, TutorsViewSet, me
-from courses.views import CourseViewSet
+from courses.views import CourseViewSet, ClassTypeViewSet
 
 
 router = DefaultRouter()
 router.register(r'students', StudentsViewSet, base_name='students')
 router.register(r'tutors', TutorsViewSet, base_name='tutors')
 router.register(r'courses', CourseViewSet, base_name='course')
+
+courses_router = NestedSimpleRouter(router, r'courses', lookup='course')
+courses_router.register(r'class_types', ClassTypeViewSet, base_name='class-type')
+
+class_type_router = NestedSimpleRouter(courses_router, r'class_types', lookup='class_type')
+
 
 urlpatterns = [
     url(r'me/', me),
@@ -36,3 +43,4 @@ urlpatterns = [
 ]
 
 urlpatterns += router.urls
+urlpatterns += courses_router.urls
