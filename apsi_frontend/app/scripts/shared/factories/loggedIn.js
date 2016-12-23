@@ -3,6 +3,7 @@
 angular.module('apsiFrontendApp').factory('LoggedInRestangular', function(Restangular, $cookieStore, $http) {
 	var service = {};
 	var instance = null;
+	
 	var tokenSaved = null;
 	service.set  = function(token) {
 		instance = Restangular.withConfig(function() {
