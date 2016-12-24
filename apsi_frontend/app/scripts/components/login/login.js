@@ -14,7 +14,15 @@ angular.module('apsiFrontendApp')
 		  	  	console.log('You are logged your tokes is :', response.token);
 		  	  	$scope.out = 'Yoy are logged as ' + $scope.username;
 		  	  	LoggedInRestangular.set(response.token);
-            	$state.go('coursesDispl');
+            Restangular.oneUrl('courses', 'http://localhost:8000/me/').get()
+              .then(function(me) {
+                if(me.type === 1){
+                   $state.go('coursesDispl');
+                }
+                if(me.type === 0){
+                   $state.go('studentCourses');
+                }
+            });
 			  },
 			  function() {
 			  	$scope.out = 'Cannot log';

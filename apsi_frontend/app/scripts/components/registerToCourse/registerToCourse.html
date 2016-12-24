@@ -1,0 +1,27 @@
+<div>
+	<h2>Rejestracja na zajęcia:</h2>
+
+  <table class="table table-striped" >
+    <thead>
+       <tr>
+         <th>Nazwa</th>
+         <th>Opis</th>
+         <th>Status</th>
+       </tr>
+    </thead>
+    <tr ng-repeat="x in records">
+      <td class="danger">{{ x.name }}</td>
+      <td class="success">{{ x.syllabus }}</td>
+      <td class="info">{{ x.state }}</td>
+      <td class="warning">
+        <div class="form-group">
+          <button ng-click='registerClick(x.code)' class="btn btn-default">Zarejestruj</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <div align="right">
+       <button ng-click='backClick()' class="btn btn-primary">Powrot</button>
+  </div>
+
+</div>

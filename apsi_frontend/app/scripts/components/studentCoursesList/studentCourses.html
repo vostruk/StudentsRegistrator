@@ -1,0 +1,27 @@
+<div>
+	<h2>Zajecia Studenta:</h2>
+
+  <table class="table table-striped" >
+    <thead>
+       <tr>
+         <th>Nazwa</th>
+         <th>Opis</th>
+         <th>Status</th>
+       </tr>
+    </thead>
+    <tr ng-repeat="x in records">
+      <td class="danger">{{ x.name }}</td>
+      <td class="success">{{ x.syllabus }}</td>
+      <td class="info">{{ x.state }}</td>
+      <td class="warning">
+        <div class="form-group">
+          <button ng-click='unregisterClick(x.code)' class="btn btn-default">Wyrejestroj</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <div align="right">
+       <button ng-click='registerClick()' class="btn btn-primary">Zarejestruj</button>
+  </div>
+
+</div>

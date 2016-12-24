@@ -47,7 +47,7 @@ angular
           }
         }
     };
-    
+
     var AddCourseState = {
         name : 'addcourse',
         url : '/addcourse/{courseid}',
@@ -58,6 +58,21 @@ angular
             return $stateParams.courseid;
           }
         }
+    };
+
+
+    var registerToCourseState = {
+        name : 'registerToCourse',
+        url : '/studentregister',
+        templateUrl: 'scripts/components/registerToCourse/registerToCourse.html',
+        controller: 'RegisterToCourseCtrl as register'
+    };
+
+    var studentCoursesState = {
+        name : 'studentCourses',
+        url : '/studentcourses',
+        templateUrl: 'scripts/components/studentCoursesList/studentCourses.html',
+        controller: 'StudentCoursesCtrl as studentcourses'
     };
 
     var coursesDisplayState = {
@@ -92,7 +107,8 @@ angular
     $stateProvider.state(loginState);
     $stateProvider.state(coursesDisplayState);
     $stateProvider.state(studentListState);
-
+    $stateProvider.state(studentCoursesState);
+    $stateProvider.state(registerToCourseState);
 
     $urlRouterProvider.otherwise('/login');
 

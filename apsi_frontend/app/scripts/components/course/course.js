@@ -16,7 +16,7 @@ angular.module('apsiFrontendApp')
 		return '';
 	}
 
-	
+
 	Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/').get()  // GET: /courses/{name}
 			.then(function(course) {
 			  $scope.courseDesc = course;
@@ -41,7 +41,7 @@ angular.module('apsiFrontendApp')
             registered: null,
             state: 0
         };
-	    
+
         Restangular.oneUrl('asdda','http://localhost:8000/courses/'+$scope.courseData.code+'/').patch(loginData).then(
             function()
             {
@@ -54,7 +54,11 @@ angular.module('apsiFrontendApp')
             }
         );
 
- 	};
+ 	  };
 
-    
+    $scope.goBack = function() {
+      $state.go('coursesDispl');
+    };
+
+
 	});
