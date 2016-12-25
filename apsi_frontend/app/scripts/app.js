@@ -61,6 +61,18 @@ angular
     };
 
 
+    var createTypeState = {
+        name : 'createType',
+        url : '/createType/{courseid}',
+        templateUrl: 'scripts/components/createType/createType.html',
+        controller: 'CreateTypeCtrl as CreateTypeCtrl',
+        resolve : {
+          coursename : function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
+
     var registerToCourseState = {
         name : 'registerToCourse',
         url : '/studentregister',
@@ -101,6 +113,7 @@ angular
         }
     };
 
+    $stateProvider.state(createTypeState);
     $stateProvider.state(AddCourseState);
     $stateProvider.state(aboutState);
     $stateProvider.state(courseEditState);

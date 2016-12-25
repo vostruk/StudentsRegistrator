@@ -4,33 +4,37 @@ angular.module('apsiFrontendApp')
 	.controller('CourseCtrl', function($scope, $state, coursename, Restangular) {
 
     function findBySpecField(data, value) {
-	    var container = data;
+      var container = data;
+      for (var i = 0; i < container.length; i++) {
+          console.log('    '+container[i].id);
+            if (container[i].id === value) {
+                console.log('+++'+container[i].full_name);
+              return(container[i]);
+            }
+      }
+      return '';
+    }
 
-		for (var i = 0; i < container.length; i++) {
-	  		console.log('    '+container[i].id);
-	    		if (container[i].id === value) {
-	        		console.log('+++'+container[i].full_name);
-	        	return(container[i]);
-	    		}
-		}
-		return '';
-	}
 
 
-	Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/').get()  // GET: /courses/{name}
+	  Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/').get()  // GET: /courses/{name}
 			.then(function(course) {
 			  $scope.courseDesc = course;
 	    	  $scope.courseData = $scope.courseDesc;
 	 	});
 
-
-	Restangular.oneUrl('coursesdd', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}
-		.then(function(tutors) {
+    Restangular.oneUrl('coursesdd', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}
+		  .then(function(tutors) {
         console.log('Tutorzy ' + tutors);
 			  $scope.tutors = tutors;
         $scope.courseDescSelectedTutor = findBySpecField(tutors, $scope.courseData.tutor);
         console.log('Znalezione' + $scope.courseDescSelectedTutor.id);
-     	});
+      });
+
+    Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/').get()  // GET: /courses/{name}
+			.then(function(classType) {
+			  $scope.classType = classType;
+	 	});
 
 		$scope.saveCourse = function() {
   		var loginData = {
@@ -58,6 +62,10 @@ angular.module('apsiFrontendApp')
 
     $scope.goBack = function() {
       $state.go('coursesDispl');
+    };
+
+    $scope.createType = function() {
+      $state.go('createType', {courseid: coursename});
     };
 
 

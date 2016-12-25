@@ -22,7 +22,33 @@
       </div>
 
 			</form>
-			 <a ui-sref="studentList({courseid: courseDesc.code})"> <button type="submit" class="btn btn-primary">Student List</button> </a>
+      <div style="padding-top: 10px">
+        <a ui-sref="studentList({courseid: courseDesc.code})">
+         <button type="submit" class="btn btn-primary">Student List</button>
+        </a>
+        <button type="submit" class="btn btn-primary" ng-click="createType()">Dodaj Zajęcia</button>
+      </div>
+
+      <h3 style="padding-top: 20px; padding-bottom: 20px">Classes</h3>
+      <div style="padding-top: 10px">
+        <table class="table table-striped">
+          <tr>
+            <th>Id.</th>
+            <th>Opis</th>
+            <th  class="text-right" >Operation</th>
+          </tr>
+          <tr ng-repeat="x in classType">
+            <td>{{x.id}}</td>
+            <td>{{x.name}}</td>
+            <td class="text-right" >
+              <button type="button" class="btn btn-default btn-sm">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </td>
+          </tr>
+
+        </table>
+      </div>
 
 
 
