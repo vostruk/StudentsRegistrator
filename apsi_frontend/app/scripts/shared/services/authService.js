@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('apsiFrontendApp').service('AuthService', function(Restangular, $cookieStore, $http, Restangular ) {
+angular.module('apsiFrontendApp').service('AuthService', function(Restangular, $cookieStore, $http) {
 
     this.set  = function(token) {
         instance = Restangular.withConfig(function() {

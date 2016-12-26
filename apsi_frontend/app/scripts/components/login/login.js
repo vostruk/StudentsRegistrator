@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('apsiFrontendApp')
-  	.controller('LoginCtrl', function($scope, $state, Restangular, LoggedInRestangular) {
+  	.controller('LoginCtrl', function($scope, $state, Restangular, LoggedInRestangular, AuthService) {
     	$scope.out = '';
     	$scope.getCred = function() {
          	var loginData = {
