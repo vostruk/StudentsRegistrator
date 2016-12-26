@@ -64,4 +64,5 @@ class TimeSlot(models.Model):
     class_type = models.ForeignKey(ClassType)
     enrolled_students = models.ManyToManyField(User)
     day = models.IntegerField(choices=DAY_CHOICES, default=Day.MONDAY)
-    time = models.TimeField()
+    time_start = models.TimeField()
+    time_end = models.TimeField()

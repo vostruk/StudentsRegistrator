@@ -44,4 +44,4 @@ class ClassTypeSerializer(serializers.ModelSerializer):
 class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeSlot
-        fields = ('id', 'day', 'time',)
+        fields = ('id', 'day', 'time_start', 'time_end',)
