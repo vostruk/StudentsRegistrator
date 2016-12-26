@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route
 from rest_framework.exceptions import PermissionDenied
 
-from courses.serializers import CourseSerializer, RegisteredStudentsSerializer, ClassTypeSerializer
-from courses.models import Course, ClassType
+from courses.serializers import CourseSerializer, RegisteredStudentsSerializer, ClassTypeSerializer, TimeSlotSerializer
+from courses.models import Course, ClassType, TimeSlot
 from users.serializers import UserSerializer
 
 
@@ -23,12 +23,25 @@ class CoursesPermissions(IsAuthenticated):
             return obj.tutor == request.user
         return True
 
+class RestrictedPermissions(IsAuthenticated):
+    def has_permission(self, request, view):
+        if not super().has_permission(request, view):
+            return False
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_tutor()
 
 class StudentsOnlyPermissions(IsAuthenticated):
     def has_permission(self, request, view):
         if not super().has_permission(request, view):
             return False
         return request.user.is_student()
+
+class TutorsOnlyPermissions(IsAuthenticated):
+    def has_permission(self, request, view):
+        if not super().has_permission(request, view):
+            return False
+        return request.user.is_tutor()
 
 
 class CourseViewSet(ModelViewSet):
@@ -105,9 +118,56 @@ class CourseViewSet(ModelViewSet):
 
 class ClassTypeViewSet(ModelViewSet):
     serializer_class = ClassTypeSerializer
-
+    permission_classes = (RestrictedPermissions,)
+    
     def get_queryset(self):
         return ClassType.objects.filter(course_id=self.kwargs['course_pk'])
 
     def perform_create(self, serializer):
         serializer.save(course_id=self.kwargs['course_pk'])
+
+
+class TimeSlotViewSet(ModelViewSet):
+    serializer_class = TimeSlotSerializer
+    permission_classes = (RestrictedPermissions,)
+
+    def get_queryset(self):
+        return TimeSlot.objects.filter(class_type_id=self.kwargs['class_type_pk'])
+
+    def perform_create(self, serializer):
+        serializer.save(class_type_id=self.kwargs['class_type_pk'])
+
+    @detail_route(['PUT', 'DELETE'], permission_classes=[StudentsOnlyPermissions])
+    def registration(self, request, course_pk, class_type_pk, pk):
+        time_slot = self.get_object()
+        user = request.user
+        if user.is_student()!=True:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': 'user should be student'}
+            )
+        if request.method == 'PUT':
+            time_slot.enrolled_students.add(user)
+        if request.method == 'DELETE':
+            time_slot.enrolled_students.remove(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @detail_route(['GET', 'POST', 'DELETE'])
+    def enrolled_students(self, request, course_pk, class_type_pk, pk):
+        time_slot = self.get_object()
+        if request.method == 'GET':
+            response_serializer = UserSerializer(time_slot.enrolled_students.all(), many=True)
+            return Response(response_serializer.data)
+
+        students_serializer = RegisteredStudentsSerializer(data=request.data)
+        students_serializer.is_valid(raise_exception=True)
+        students = students_serializer.validated_data['students']
+
+        if request.method == 'POST':
+            time_slot.enrolled_students.add(*students)
+        if request.method == 'DELETE':
+            time_slot.enrolled_students.remove(*students)
+
+        time_slot = self.get_object()
+        response_serializer = UserSerializer(time_slot.enrolled_students.all(), many=True)
+        return Response(response_serializer.data)

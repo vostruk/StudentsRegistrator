@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from courses.models import Course, ClassType, Group
+from courses.models import Course, ClassType, Group, TimeSlot
 from users.models import User
 
 
@@ -33,4 +33,15 @@ class RegisteredStudentsSerializer(serializers.Serializer):
 class ClassTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClassType
-        fields = ('id', 'name',)
+        fields = ('id', 'name' )
+        
+    def get_enrolled(self, course):
+        user = self.context['request'].user
+        if not user.is_student():
+            return None
+        return user in time_slot.enrolled_students.all()
+
+class TimeSlotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TimeSlot
+        fields = ('id', 'day', 'time',)

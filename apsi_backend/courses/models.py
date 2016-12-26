@@ -47,5 +47,21 @@ class Group(models.Model):
 
 
 class TimeSlot(models.Model):
+    class Day:
+        MONDAY = 0
+        TUESDAY = 1
+        WEDNESDAY = 2
+        THURSDAY = 3
+        FRIDAY = 4
+
+    DAY_CHOICES = (
+        (Day.MONDAY, 'Poniedziałek'),
+        (Day.TUESDAY, 'Wtorek'),
+        (Day.WEDNESDAY, 'Środa'),
+        (Day.THURSDAY, 'Czwartek'),
+        (Day.FRIDAY, 'Piątek'),
+    )
     class_type = models.ForeignKey(ClassType)
     enrolled_students = models.ManyToManyField(User)
+    day = models.IntegerField(choices=DAY_CHOICES, default=Day.MONDAY)
+    time = models.TimeField()

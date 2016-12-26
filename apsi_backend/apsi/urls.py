@@ -20,7 +20,7 @@ from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
 from users.views import StudentsViewSet, TutorsViewSet, me
-from courses.views import CourseViewSet, ClassTypeViewSet
+from courses.views import CourseViewSet, ClassTypeViewSet, TimeSlotViewSet
 
 
 router = DefaultRouter()
@@ -32,6 +32,7 @@ courses_router = NestedSimpleRouter(router, r'courses', lookup='course')
 courses_router.register(r'class_types', ClassTypeViewSet, base_name='class-type')
 
 class_type_router = NestedSimpleRouter(courses_router, r'class_types', lookup='class_type')
+class_type_router.register(r'time_slots', TimeSlotViewSet, base_name='time-slot')
 
 
 urlpatterns = [
@@ -44,3 +45,4 @@ urlpatterns = [
 
 urlpatterns += router.urls
 urlpatterns += courses_router.urls
+urlpatterns += class_type_router.urls
