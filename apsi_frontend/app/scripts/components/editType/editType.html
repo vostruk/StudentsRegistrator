@@ -27,13 +27,11 @@
           <tr>
             <th>Dzień</th>
             <th>Od</th>
-            <th>Do</th>
             <th  class="text-right" >Operation</th>
           </tr>
-          <tr ng-repeat="x in termines">
-            <td>{{x.day}}</td>
-            <td>{{x.from}}</td>
-            <td>{{x.to}}</td>
+          <tr ng-repeat="y in termines">
+            <td>{{y.day}}</td>
+            <td>{{y.time}}</td>
             <td class="text-right" >
               <button type="button" class="btn btn-default btn-sm" ng-click="removeTermine(x.id)">
                 <span class="glyphicon glyphicon-remove"></span>
