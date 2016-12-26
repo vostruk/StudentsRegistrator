@@ -21,7 +21,9 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from users.views import StudentsViewSet, TutorsViewSet, me
 from courses.views import CourseViewSet, ClassTypeViewSet, TimeSlotViewSet
+from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='APSI groups API')
 
 router = DefaultRouter()
 router.register(r'students', StudentsViewSet, base_name='students')
@@ -40,7 +42,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^login/', obtain_auth_token),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^docs/', include('rest_framework_docs.urls')),
+    url(r'^docs2/', include('rest_framework_docs.urls')),
+    url(r'^docs/', schema_view)
 ]
 
 urlpatterns += router.urls

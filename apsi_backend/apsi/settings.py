@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_docs',
+    'rest_framework_swagger',
     'users',
     'courses',
 ]
@@ -125,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK_DOCS = {
-    'HIDE_DOCS': False  # Default: False
+    'HIDE_DOCS': True  # Default: False
 }
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -140,6 +141,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+LOGIN_URL = 'rest_framework:login'
+
+LOGOUT_URL = 'rest_framework:logout'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
