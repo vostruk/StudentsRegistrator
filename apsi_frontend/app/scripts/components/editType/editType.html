@@ -1,0 +1,47 @@
+<div>
+	<h2>Zmieniasz: {{classType.name}}</h2>
+
+	<form>
+		<div class="form-group">
+			<div class="form-group">
+				<label for="nameInput">Nazwa zajęć:</label>
+    			<input type="text" class="form-control" id="nameInput" placeholder="Course name" ng-model="classType.name">
+			</div>
+      <div align="right" style="padding-top: 10px">
+				 <button type="submit" class="btn btn-default" ng-click="goBack()">Wróć</button>
+				 <button type="submit" class="btn btn-primary" ng-click="editType()">Zapisz</button>
+      </div>
+      <div style="padding-top: 10px">
+				 <button type="submit" class="btn btn-primary" ng-click="addTermine()">Dodaj Termin</button>
+      </div>
+      <div id="termineForm" style="padding-top: 10px; visibility: {{setVisibility}};">
+         <select  ng-options='o.name for o in week' ng-model="day"></select>
+         <label for="FromInput" align="right">Od:</label>
+         <input type="text" id="FromInput" placeholder="15" ng-model="fromInput">
+         <label for="ToInput">Do:</label>
+         <input type="text" id="ToInput" placeholder="16" ng-model="toInput">
+         <button type="submit" class="btn btn-primary" ng-click="saveTermine()">Zapisz Termin</button>
+      </div>
+      <div style="padding-top: 10px">
+        <table class="table table-striped">
+          <tr>
+            <th>Dzień</th>
+            <th>Od</th>
+            <th>Do</th>
+            <th  class="text-right" >Operation</th>
+          </tr>
+          <tr ng-repeat="x in termines">
+            <td>{{x.day}}</td>
+            <td>{{x.from}}</td>
+            <td>{{x.to}}</td>
+            <td class="text-right" >
+              <button type="button" class="btn btn-default btn-sm" ng-click="removeTermine(x.id)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </div>
+		</div>
+	</form>
+</div>
