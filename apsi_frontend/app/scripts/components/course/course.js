@@ -68,5 +68,23 @@ angular.module('apsiFrontendApp')
       $state.go('createType', {courseid: coursename});
     };
 
+    $scope.editType = function(typeid) {
+      $state.go('typeedit', {courseid: coursename, classid: typeid});
+    };
+
+    $scope.removeType = function(typeid) {
+      Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeid+'/').remove().then(
+          function()
+          {
+            console.log(typeid+' deleted');
+            $state.reload();
+          },
+          function ()
+          {
+            console.log('remove fail.');
+          }
+      );
+    };
+
 
 	});

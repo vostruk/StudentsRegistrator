@@ -36,6 +36,21 @@ angular
     };
 
 
+    var editTypeState = {
+        name : 'typeedit',
+        url : '/editType/:courseid/:classid',
+        templateUrl: 'scripts/components/editType/editType.html',
+        controller: 'EditTypeCtrl as EditTypeCtrl',
+        resolve : {
+          coursename : function($stateParams) {
+            return $stateParams.courseid;
+          },
+          typeId : function($stateParams) {
+            return $stateParams.classid;
+          }
+        }
+    };
+
     var courseEditState = {
         name : 'courseedit',
         url : '/courses/{courseid}',
@@ -63,7 +78,7 @@ angular
 
     var createTypeState = {
         name : 'createType',
-        url : '/createType/{courseid}',
+        url : '/createType/{courseid}/',
         templateUrl: 'scripts/components/createType/createType.html',
         controller: 'CreateTypeCtrl as CreateTypeCtrl',
         resolve : {
@@ -122,7 +137,7 @@ angular
     $stateProvider.state(studentListState);
     $stateProvider.state(studentCoursesState);
     $stateProvider.state(registerToCourseState);
-
+    $stateProvider.state(editTypeState);
     $urlRouterProvider.otherwise('/login');
 
 
