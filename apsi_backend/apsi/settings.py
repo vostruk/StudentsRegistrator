@@ -125,6 +125,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+SWAGGER_SETTINGS = {
+    'SHOW_REQUEST_HEADERS': True
+}
+
 REST_FRAMEWORK_DOCS = {
     'HIDE_DOCS': True  # Default: False
 }

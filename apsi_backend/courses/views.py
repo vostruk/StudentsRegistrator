@@ -45,10 +45,23 @@ class TutorsOnlyPermissions(IsAuthenticated):
 
 
 class CourseViewSet(ModelViewSet):
+
+    """ 
+    Course resource. 
+    
+    For the state argument you should pass 0 or one, meaning:
+    
+    REGISTRATION_OPENED = 0
+    STUDENTS_LIST_ACCEPTED = 1
+    """
+
     serializer_class = CourseSerializer
     permission_classes = (CoursesPermissions,)
 
     def get_queryset(self):
+
+        """ Returns list of objects. """
+
         registered = self.request.query_params.get('registered', None)
         if registered == 'true':
             return self.request.user.courses_attended
@@ -82,6 +95,9 @@ class CourseViewSet(ModelViewSet):
 
     @detail_route(['PUT', 'DELETE'], permission_classes=[StudentsOnlyPermissions])
     def registration(self, request, pk):
+
+        """ Registers actually logged student (or that who actually sent request) to current course. """
+
         course = self.get_object()
         user = request.user
         if user.is_student() and course.state != Course.State.REGISTRATION_OPENED:
@@ -97,6 +113,9 @@ class CourseViewSet(ModelViewSet):
 
     @detail_route(['GET', 'POST', 'DELETE'])
     def registered_students(self, request, pk):
+
+        """ Shows the list of students registered for that course (can be only seen by tutor). """
+
         course = self.get_object()
         if request.method == 'GET':
             response_serializer = UserSerializer(course.registered_students.all(), many=True)
@@ -117,6 +136,15 @@ class CourseViewSet(ModelViewSet):
 
 
 class ClassTypeViewSet(ModelViewSet):
+
+    """
+    Class type of the course.
+
+    For example it can be project, training, laboratorium or other defined by tutor.
+
+    name parameter is a string description of a course type 
+    """ 
+
     serializer_class = ClassTypeSerializer
     permission_classes = (RestrictedPermissions,)
     
@@ -128,8 +156,39 @@ class ClassTypeViewSet(ModelViewSet):
 
 
 class TimeSlotViewSet(ModelViewSet):
+
+    """
+    Time slot of the course.
+
+    ***
+    Field Name | Field formats
+    ---------- | -------------
+    day        | {0,1,2,3,4}
+    time_start | 'hh:mm:ss'
+    time_end   | 'hh:mm:ss'
+
+
+    day field values meaning:
+    MONDAY = 0
+    TUESDAY = 1
+    WEDNESDAY = 2
+    THURSDAY = 3
+    FRIDAY = 4
+
+    Example json value as an argument:
+    ```json
+    {
+    "id": 7,
+    "day": 2,
+    "time_start": "18:15:00",
+    "time_end": "20:00:00"
+    },
+    ``` 
+
+    """ 
     serializer_class = TimeSlotSerializer
     permission_classes = (RestrictedPermissions,)
+    model = TimeSlot
 
     def get_queryset(self):
         return TimeSlot.objects.filter(class_type_id=self.kwargs['class_type_pk'])
