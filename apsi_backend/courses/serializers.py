@@ -31,9 +31,17 @@ class RegisteredStudentsSerializer(serializers.Serializer):
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
+    enrolled = serializers.SerializerMethodField()
+
     class Meta:
         model = TimeSlot
-        fields = ('id', 'day', 'time_start', 'time_end',)
+        fields = ('id', 'day', 'time_start', 'time_end', 'enrolled')
+
+    def get_enrolled(self, time_slot):
+        user = self.context['request'].user
+        if not user.is_student():
+            return None
+        return user in time_slot.enrolled_students.all()
 
 
 class ClassTypeSerializer(serializers.ModelSerializer):
