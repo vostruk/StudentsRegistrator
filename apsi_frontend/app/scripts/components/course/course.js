@@ -2,13 +2,51 @@
 
 angular.module('apsiFrontendApp')
 	.controller('CourseCtrl', function($scope, $state, coursename, Restangular) {
+    $scope.week = [
+      {
+        id: 0,
+        name: 'Poniedzialek'
+      },
+      {
+        id: 1,
+        name: 'Wtorek'
+      },
+      {
+        id: 2,
+        name: 'Sroda'
+      },
+      {
+        id: 3,
+        name: 'Czwartek'
+      },
+      {
+        id: 4,
+        name: 'Piatek'
+      }
+    ];
+    $scope.i = 0;
+    Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/').get()
+			.then(function(classType) {
+        console.log('types: '+classType);
+        $scope.classType = classType;
+        for (var i =0; i < classType.length; i++) {
+          Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+classType[i].id+'/time_slots/').get()
+            .then( function(termines) {
+                $scope.mapTermine[$scope.i].value = termines;
+                $scope.mapTermine[$scope.i].name = coursename;
+                $scope.i++;
+              }
+            );
+        }
+	 	});
+    
 
     function findBySpecField(data, value) {
       var container = data;
       for (var i = 0; i < container.length; i++) {
-          console.log('    '+container[i].id);
+          // console.log('    '+container[i].id);
             if (container[i].id === value) {
-                console.log('+++'+container[i].full_name);
+                // console.log('+++'+container[i].full_name);
               return(container[i]);
             }
       }
@@ -31,10 +69,24 @@ angular.module('apsiFrontendApp')
         console.log('Znalezione' + $scope.courseDescSelectedTutor.id);
       });
 
-    Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/').get()  // GET: /courses/{name}
-			.then(function(classType) {
-			  $scope.classType = classType;
-	 	});
+    function findDay(day_id) {
+        for (var i=0; i<$scope.week.length; i++) {
+          if($scope.week[i].id === day_id){
+            return $scope.week[i].name;
+          }
+        }
+    }
+
+    function dayFormat(termines) {
+        for (var i=0; i<termines.length; i++) {
+          termines[i].day = findDay(termines[i].day)
+        }
+        return termines;
+    }
+
+
+
+
 
 		$scope.saveCourse = function() {
   		var loginData = {

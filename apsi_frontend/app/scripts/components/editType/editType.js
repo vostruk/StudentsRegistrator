@@ -86,7 +86,8 @@ angular.module('apsiFrontendApp')
     $scope.saveTermine = function() {
       var termine = {
         day: $scope.day.id,
-        time: $scope.fromInput
+        time_start: $scope.fromInput,
+        time_end: $scope.toInput
       };
       //TODO zapis terminu
       Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/').post('time_slots/',termine).then(

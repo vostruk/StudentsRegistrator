@@ -43,15 +43,10 @@
             <td>{{x.name}}</td>
             <td>
               <table class="table table-striped">
-                <tr>
-                  <td>asd</td>
-                  <td class="text-right">asd</td>
-                  <td>asd</td>
-                </tr>
-                <tr>
-                  <td>asd</td>
-                  <td class="text-right">asd</td>
-                  <td>asd</td>
+                <tr ng-repeat="y in x.termine">
+                  <td>{{y.day}}</td>
+                  <td class="text-right">{{y.time_start}}</td>
+                  <td>{{y.time_end}}</td>
                 </tr>
               </table>
             </td>
