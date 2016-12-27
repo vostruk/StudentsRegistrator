@@ -61,8 +61,8 @@ class TimeSlot(models.Model):
         (Day.THURSDAY, 'Czwartek'),
         (Day.FRIDAY, 'Piątek'),
     )
-    class_type = models.ForeignKey(ClassType)
+    class_type = models.ForeignKey(ClassType, related_name='time_slots')
     enrolled_students = models.ManyToManyField(User)
-    day = models.IntegerField(choices=DAY_CHOICES, default=Day.MONDAY)
+    day = models.IntegerField(choices=DAY_CHOICES)
     time_start = models.TimeField()
     time_end = models.TimeField()
