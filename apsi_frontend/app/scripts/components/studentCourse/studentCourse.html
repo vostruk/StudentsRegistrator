@@ -28,12 +28,18 @@
             <td>
               <table class="table table-striped">
                 <tr ng-repeat="y in x.time_slots">
-                  <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
-                  <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
-                  <td width="10%"><span style="color: grey; ">-</span></td>
-                  <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
-                  <td>
-                    <button ng-if="" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="sign(x.id,y.id)">
+                  <td width="50%" ng-if="y.enrolled" class="success"><span style="color: grey; ">{{y.day}}</span></td>
+                  <td width="50%" ng-if="!y.enrolled" class="danger"><span style="color: grey; ">{{y.day}}</span></td>
+                  <td width="20%" ng-if="y.enrolled" class="success"><span style="color: grey; ">{{y.time_start}}</span></td>
+                  <td width="20%" ng-if="!y.enrolled" class="danger"><span style="color: grey; ">{{y.time_start}}</span></td>
+                  <td width="10%" ng-if="y.enrolled" class="success"><span style="color: grey; ">-</span></td>
+                  <td width="10%" ng-if="!y.enrolled" class="danger"><span style="color: grey; ">-</span></td>
+                  <td width="20%" ng-if="y.enrolled" class="success"><span style="color: grey; ">{{y.time_end}}</span></td>
+                  <td width="20%" ng-if="!y.enrolled" class="danger"><span style="color: grey; ">{{y.time_end}}</span></td>
+                  <td ng-if="y.enrolled" class="success" >
+                  </td>
+                  <td ng-if="!y.enrolled" class="danger">
+                    <button  type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="sign(x.id,y.id)">
                       <span class="glyphicon glyphicon-edit"></span>
                     </button>
                   </td>
