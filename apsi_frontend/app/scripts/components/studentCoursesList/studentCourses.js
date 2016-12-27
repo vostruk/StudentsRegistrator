@@ -18,7 +18,11 @@ angular.module('apsiFrontendApp')
           console.log(id+' redirect to unregister');
           $state.reload();
       });
+    };
 
+    $scope.detailsClick = function (id) {
+      console.log(id+' details');
+      $state.go('studentCourse', {courseid:id});
     };
 
     $scope.registerClick = function () {

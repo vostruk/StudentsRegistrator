@@ -101,6 +101,18 @@ angular
         templateUrl: 'scripts/components/studentCoursesList/studentCourses.html',
         controller: 'StudentCoursesCtrl as studentcourses'
     };
+    
+    var studentCourseState = {
+        name : 'studentCourse',
+        url : '/studentcourse/{courseid}',
+        templateUrl: 'scripts/components/studentCourse/studentCourse.html',
+        controller: 'StudentCourseCtrl as StudentCourseCtrl',
+        resolve : {
+          coursename : function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
 
     var coursesDisplayState = {
         name : 'coursesDispl',
@@ -127,6 +139,8 @@ angular
           }
         }
     };
+    
+    
 
     $stateProvider.state(createTypeState);
     $stateProvider.state(AddCourseState);
@@ -136,6 +150,7 @@ angular
     $stateProvider.state(coursesDisplayState);
     $stateProvider.state(studentListState);
     $stateProvider.state(studentCoursesState);
+    $stateProvider.state(studentCourseState);
     $stateProvider.state(registerToCourseState);
     $stateProvider.state(editTypeState);
     $urlRouterProvider.otherwise('/login');

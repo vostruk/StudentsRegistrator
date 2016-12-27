@@ -39,14 +39,15 @@
             <th  class="text-right" >Operation</th>
           </tr>
           <tr ng-repeat="x in classType">
-            <td>{{x.id}}</td>
+            <td style="color: grey">{{x.id}}</td>
             <td>{{x.name}}</td>
             <td>
               <table class="table table-striped">
-                <tr ng-repeat="y in x.termine">
-                  <td>{{y.day}}</td>
-                  <td class="text-right">{{y.time_start}}</td>
-                  <td>{{y.time_end}}</td>
+                <tr ng-repeat="y in x.time_slots">
+                  <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
+                  <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
+                  <td width="10%"><span style="color: grey; ">-</span></td>
+                  <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
                 </tr>
               </table>
             </td>

@@ -25,21 +25,31 @@ angular.module('apsiFrontendApp')
       }
     ];
     $scope.i = 0;
+
+    function findDay(day_id) {
+        for (var i=0; i<$scope.week.length; i++) {
+          if($scope.week[i].id === day_id){
+            return $scope.week[i].name;
+          }
+        }
+    }
+
+    function dayFormat(termines) {
+        for (var i=0; i<termines.length; i++) {
+          termines[i].day = findDay(termines[i].day)
+        }
+        return termines;
+    }
+
     Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/').get()
 			.then(function(classType) {
         console.log('types: '+classType);
         $scope.classType = classType;
-        for (var i =0; i < classType.length; i++) {
-          Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+classType[i].id+'/time_slots/').get()
-            .then( function(termines) {
-                $scope.mapTermine[$scope.i].value = termines;
-                $scope.mapTermine[$scope.i].name = coursename;
-                $scope.i++;
-              }
-            );
+        for (var i=0; i < classType.length; i++) {
+          $scope.classType[i].time_slots = dayFormat($scope.classType[i].time_slots);
         }
 	 	});
-    
+
 
     function findBySpecField(data, value) {
       var container = data;
@@ -69,20 +79,7 @@ angular.module('apsiFrontendApp')
         console.log('Znalezione' + $scope.courseDescSelectedTutor.id);
       });
 
-    function findDay(day_id) {
-        for (var i=0; i<$scope.week.length; i++) {
-          if($scope.week[i].id === day_id){
-            return $scope.week[i].name;
-          }
-        }
-    }
 
-    function dayFormat(termines) {
-        for (var i=0; i<termines.length; i++) {
-          termines[i].day = findDay(termines[i].day)
-        }
-        return termines;
-    }
 
 
 

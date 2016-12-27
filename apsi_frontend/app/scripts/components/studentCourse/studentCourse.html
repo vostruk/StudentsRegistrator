@@ -1,0 +1,51 @@
+<div>
+	<h2>{{courseDesc.code}}</h2>
+
+	<form>
+		<div class="form-group">
+			<form>
+        <div class="form-group">
+          <label>Opis:</label>
+          <label>{{courseDesc.syllabus}}</label>
+        </div>
+        <div style="padding-top: 20px">
+          <label>Prowadzący:</label>
+          <label>{{courseDescSelectedTutor.full_name}}</label>
+        </div>
+			</form>
+
+      <h3 style="padding-top: 20px; padding-bottom: 20px">Zajęcia</h3>
+      <div style="padding-top: 10px">
+        <table class="table table-striped">
+          <tr>
+            <th>Id.</th>
+            <th>Opis</th>
+            <th>Terminy</th>
+          </tr>
+          <tr ng-repeat="x in classType">
+            <td style="color: grey">{{x.id}}</td>
+            <td>{{x.name}}</td>
+            <td>
+              <table class="table table-striped">
+                <tr ng-repeat="y in x.time_slots">
+                  <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
+                  <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
+                  <td width="10%"><span style="color: grey; ">-</span></td>
+                  <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
+                  <td>
+                    <button ng-if="" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="sign(x.id,y.id)">
+                      <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div style="padding-top: 10px">
+        <button type="button" class="btn btn-default" ng-click="goBack()">Wróć</button>
+      </div>
+		</div>
+	</form>
+</div>

@@ -6,11 +6,17 @@
 angular.module('apsiFrontendApp')
 	.controller('AddCourseCtrl', function($scope, $state, Restangular) {
 
+    Restangular.oneUrl('courses', 'http://localhost:8000/me/').get()
+      .then(function(me) {
+        $scope.me = me;
+      });
+
     $scope.addCourse = function () {
         var loginData = {
             code: $scope.coursecode,
             name: $scope.coursename,
             syllabus: $scope.coursesyllabus,
+            tutor: $scope.me.id,
             registered: null,
             state: 0
         };
