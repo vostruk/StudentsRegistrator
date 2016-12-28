@@ -33,8 +33,9 @@ angular.module('apsiFrontendApp')
         );
     };
 
-    $scope.cancelEdit = function () {
-         $state.go('coursesDispl');
+    $scope.cancelEdit = function () 
+    {
+        $state.go('coursesDispl');
     };
 
 	});

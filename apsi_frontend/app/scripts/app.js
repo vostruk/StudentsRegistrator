@@ -21,19 +21,11 @@ angular
     'restangular'
   ])
   .config(function ($stateProvider,  $urlRouterProvider) {
-
-    // var mainState = {
-    //     name : 'main' ,
-    //     url :'/',
-    //     templateUrl: 'views/main.html',
-    //     controller: 'MainCtrl'
-    // };
-
-    var aboutState = {
-      name : 'about',
-      url : '/about',
-      template : '<h2>About</h2>'
-    };
+      var aboutState = {
+          name : 'about',
+          url : '/about',
+          template : '<h2>About</h2>'
+      };
 
 
     var editTypeState = {
@@ -57,7 +49,7 @@ angular
         templateUrl: 'scripts/components/course/course.html',
         controller: 'CourseCtrl as course',
         resolve : {
-          coursename : function($stateParams) {
+          courseCode : function($stateParams) {
             return $stateParams.courseid;
           }
         }
@@ -65,14 +57,9 @@ angular
 
     var AddCourseState = {
         name : 'addcourse',
-        url : '/addcourse/{courseid}',
+        url : '/courses/add',
         templateUrl: 'scripts/components/addCourse/addCourse.html',
         controller: 'AddCourseCtrl as managecourse',
-        resolve : {
-          coursename : function($stateParams) {
-            return $stateParams.courseid;
-          }
-        }
     };
 
 
@@ -121,12 +108,12 @@ angular
         controller: 'CoursesCtrl as courses'
     };
 
-    var loginState = {
-      name : 'login',
-      url : '/login',
-      templateUrl : 'scripts/components/login/login.html',
-      controller : 'LoginCtrl'
-    };
+      var loginState = {
+          name : 'login',
+          url : '/login',
+          templateUrl : 'scripts/components/login/login.html',
+          controller : 'LoginCtrl'
+      };
 
     var studentListState = {
       name : 'studentList',
