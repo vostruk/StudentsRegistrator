@@ -112,6 +112,7 @@ class GroupsViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_group_add(self):
+        self.client.force_authenticate(self.student1)
         response = self.client.post(
             reverse(
                 'group-list',
