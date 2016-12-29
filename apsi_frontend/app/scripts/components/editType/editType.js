@@ -43,7 +43,6 @@ angular.module('apsiFrontendApp')
         }
         return termines;
     }
-    //TODO pobieranie terminow do typu i wyswietlenie listy
     Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/time_slots/').get()
         .then( function(termines) {
             console.log('Get termines:  ' + termines);
@@ -89,7 +88,6 @@ angular.module('apsiFrontendApp')
         time_start: $scope.fromInput,
         time_end: $scope.toInput
       };
-      //TODO zapis terminu
       Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/').post('time_slots/',termine).then(
           function() {
             console.log('Created new termine.  ');
@@ -106,7 +104,6 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.removeTermine = function(id) {
-      //TODO usuwanie terminu
       Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/time_slots/'+id+'/').remove()
         .then(function() {
           console.log(id+' deleted');

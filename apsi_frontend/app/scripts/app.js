@@ -43,6 +43,18 @@ angular
         }
     };
 
+    var groupsManagerState = {
+        name : 'groupsManager',
+        url : '/groupsManager/:courseid/',
+        templateUrl: 'scripts/components/groupsManager/groupsManager.html',
+        controller: 'GroupsManagerCtrl as GroupsManagerCtrl',
+        resolve : {
+          courseCode: function($stateParams) {
+            return $stateParams.courseid;
+          }
+        }
+    };
+
     var courseEditState = {
         name : 'courseedit',
         url : '/courses/{courseid}',
@@ -88,7 +100,7 @@ angular
         templateUrl: 'scripts/components/studentCoursesList/studentCourses.html',
         controller: 'StudentCoursesCtrl as studentcourses'
     };
-    
+
     var studentCourseState = {
         name : 'studentCourse',
         url : '/studentcourse/{courseid}',
@@ -126,8 +138,8 @@ angular
           }
         }
     };
-    
-    
+
+
 
     $stateProvider.state(createTypeState);
     $stateProvider.state(AddCourseState);
@@ -140,6 +152,7 @@ angular
     $stateProvider.state(studentCourseState);
     $stateProvider.state(registerToCourseState);
     $stateProvider.state(editTypeState);
+    $stateProvider.state(groupsManagerState);
     $urlRouterProvider.otherwise('/login');
 
 
