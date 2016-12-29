@@ -144,6 +144,19 @@ class GroupsViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         group1 = Group.objects.get(pk=self.group1.pk)
         self.assertIn(self.student1, group1.student_members.all())
+        response = self.client.put(
+            reverse(
+                'group-register',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                    'pk': self.group2.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        group2 = Group.objects.get(pk=self.group2.pk)
+        self.assertIn(self.student1, group2.student_members.all())
 
     def test_delete(self):
         self.client.force_authenticate(self.student1)
