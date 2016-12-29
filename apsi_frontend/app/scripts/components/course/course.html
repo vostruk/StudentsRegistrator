@@ -35,12 +35,14 @@
           <tr>
             <th>Id.</th>
             <th>Opis</th>
+            <th>Grupy</th>
             <th>Terminy</th>
             <th  class="text-right" >Operation</th>
           </tr>
           <tr ng-repeat="x in classType">
             <td style="color: grey">{{x.id}}</td>
             <td>{{x.name}}</td>
+            <td>{{x.groups}}</td>
             <td>
               <table class="table table-striped">
                 <tr ng-repeat="y in x.time_slots">

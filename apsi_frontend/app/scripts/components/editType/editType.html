@@ -14,13 +14,15 @@
       <div style="padding-top: 10px">
 				 <button type="submit" class="btn btn-primary" ng-click="addTermine()">Dodaj Termin</button>
       </div>
-      <div id="termineForm" style="padding-top: 10px; visibility: {{setVisibility}};">
+      <div id="termineForm" style="padding-top: 10px; visibility:{{setVisibility}};">
          <select  ng-options='o.name for o in week' ng-model="day"></select>
          <label for="FromInput" align="right">Od:</label>
-         <input type="text" id="FromInput" placeholder="15" ng-model="fromInput">
+         <input type="text" id="FromInput" placeholder="15:00" ng-model="fromInput">
          <label for="ToInput">Do:</label>
-         <input type="text" id="ToInput" placeholder="16" ng-model="toInput">
+         <input type="text" id="ToInput" placeholder="16:00" ng-model="toInput">
          <button type="submit" class="btn btn-primary" ng-click="saveTermine()">Zapisz Termin</button>
+         <button ng-if="!classType.group" type="submit" class="btn btn-primary" ng-click="acceptGroups()">Grupy: zezwól</button>
+         <button ng-if="classType.group" type="submit" class="btn btn-primary" ng-click="rejectGroups()">Grupy: zabroń</button>
       </div>
       <div style="padding-top: 10px">
         <table class="table table-striped">

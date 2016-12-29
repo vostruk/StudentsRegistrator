@@ -110,4 +110,12 @@ angular.module('apsiFrontendApp')
           $state.reload();
       });
     };
+
+    $scope.acceptGroups = function () {
+      Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/groups/open/').put()
+        .then(function() {
+          console.log('groups open.');
+          $state.reload();
+      });
+    };
 	});

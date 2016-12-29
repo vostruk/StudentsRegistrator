@@ -45,12 +45,15 @@ angular
 
     var groupsManagerState = {
         name : 'groupsManager',
-        url : '/groupsManager/:courseid/',
+        url : '/groupsManager/:courseid/:classid',
         templateUrl: 'scripts/components/groupsManager/groupsManager.html',
         controller: 'GroupsManagerCtrl as GroupsManagerCtrl',
         resolve : {
           courseCode: function($stateParams) {
             return $stateParams.courseid;
+          },
+          typeId : function($stateParams) {
+            return $stateParams.classid;
           }
         }
     };
