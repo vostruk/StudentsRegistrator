@@ -297,7 +297,6 @@ class GroupsViewSet(ModelViewSet):
     @detail_route(['PUT'], permission_classes=[StudentsOnlyPermissions])
     def register(self, request, course_pk, class_type_pk, pk):
         group = self.get_object()
-
         groups = (
             request.user.attended_groups
             .filter(
@@ -305,8 +304,8 @@ class GroupsViewSet(ModelViewSet):
             )
         )
         if groups.exists():
-            for group in groups:
-                group.student_members.remove(self.request.user)
+            for old_group in groups:
+                old_group.student_members.remove(self.request.user)
 
         group.student_members.add(request.user)
         return Response({})
