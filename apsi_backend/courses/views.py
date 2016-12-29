@@ -286,7 +286,13 @@ class GroupsViewSet(ModelViewSet):
         serializer.save(
             class_type_id=self.kwargs['class_type_pk'],
             creator=self.request.user,
+            student_members=[self.request.user]
         )
+
+    def perform_destroy(self, instance):
+        if instance.creator != self.request.user:
+            raise Http404
+        instance.delete()
 
     @detail_route(['PUT'], permission_classes=[StudentsOnlyPermissions])
     def register(self, request, course_pk, class_type_pk, pk):

@@ -81,9 +81,9 @@ class GroupsViewTestCase(APITestCase):
         self.student2 = UserFactory(type=User.Type.STUDENT)
         self.student3 = UserFactory(type=User.Type.STUDENT)
         course = CourseFactory()
-        class_type = ClassTypeFactory(course=course)
-        self.group1 = GroupFactory(class_type=class_type)
-        self.group2 = GroupFactory(class_type=class_type)
+        self.class_type = ClassTypeFactory(course=course)
+        self.group1 = GroupFactory(class_type=self.class_type)
+        self.group2 = GroupFactory(class_type=self.class_type)
 
     def test_group_list(self):
         response = self.client.get(
@@ -112,6 +112,7 @@ class GroupsViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_group_add(self):
+        self.client.force_authenticate(self.student1)
         response = self.client.post(
             reverse(
                 'group-list',
@@ -143,6 +144,24 @@ class GroupsViewTestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         group1 = Group.objects.get(pk=self.group1.pk)
         self.assertIn(self.student1, group1.student_members.all())
+
+    def test_delete(self):
+        self.client.force_authenticate(self.student1)
+        group = GroupFactory(
+            class_type=self.class_type,
+            creator=self.student1
+        )
+        response = self.client.delete(
+            reverse(
+                'group-detail',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                    'pk': group.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_close(self):
         response = self.client.put(
