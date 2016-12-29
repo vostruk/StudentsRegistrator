@@ -49,23 +49,42 @@ class TimeSlotSerializer(serializers.ModelSerializer):
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    class_type = serializers.StringRelatedField()
     student_members = UserSerializer(many=True, read_only=True)
     is_registered = serializers.SerializerMethodField('get_registration_status')
 
     class Meta(object):
         model = Group
-        fields = ('class_type', 'student_members', 'is_registered', 'name')
+        fields = (
+            'id',
+            'creator',
+            'student_members',
+            'is_registered',
+            'name'
+        )
 
     def get_registration_status(self, obj):
         user = self.context['request'].user
         return user in obj.student_members.all()
 
+    def create(self, validated_data):
+        members_data = validated_data.pop('student_members')
+        group = Group.objects.create(**validated_data)
+        for student in members_data:
+            group.student_members.add(student)
+        return group
+
 
 class ClassTypeSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotSerializer(many=True, read_only=True)
     groups = GroupSerializer(many=True, read_only=True)
+    group_open = serializers.SerializerMethodField('get_group_status')
 
     class Meta(object):
         model = ClassType
         fields = ('id', 'name', 'time_slots', 'groups')
+
+    def get_group_status(self, obj):
+        if obj.group_status == ClassType.GroupsState.GROUPS_REGISTRATION_OPEN:
+            return True
+        else:
+            return False
