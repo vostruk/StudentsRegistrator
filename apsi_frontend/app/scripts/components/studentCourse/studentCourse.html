@@ -21,6 +21,7 @@
             <th>Id.</th>
             <th>Opis</th>
             <th>Terminy</th>
+            <th>Grupy</th>
           </tr>
           <tr ng-repeat="x in classType">
             <td style="color: grey">{{x.id}}</td>
@@ -46,13 +47,13 @@
                 </tr>
               </table>
             </td>
-
-          </tr>
-          <td>
+            <td>
             <button  type="button" class="btn btn-default" id="buttonGropus" ng-click="manageGropus(x.id)">
               <span class="button">Grupy</span>
             </button>
           </td>
+          </tr>
+
         </table>
       </div>
       <div style="padding-top: 10px">

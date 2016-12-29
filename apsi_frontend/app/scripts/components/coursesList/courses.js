@@ -11,14 +11,12 @@ angular.module('apsiFrontendApp')
         $scope.records = response.data;
     });
 
-<<<<<<< HEAD
+
 
     $scope.detailClick = function (id) {
         console.log(id+' redirect to detail');
     };
-
-=======
->>>>>>> 171ccdb8ffd48c74477388f40493d509163ca30a
+    
     $scope.editClick = function (id) {
         console.log(id+' redirect to edit');
         $state.go('courseedit', {courseid:id});

@@ -53,6 +53,7 @@ angular.module('apsiFrontendApp')
     Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/').get()
         .then( function(type) {
             console.log('Get:  ' + type.name);
+            console.log('Groups:  ' + type.group_open);
             $scope.classType = type;
           }
         );
@@ -115,6 +116,14 @@ angular.module('apsiFrontendApp')
       Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/groups/open/').put()
         .then(function() {
           console.log('groups open.');
+          $state.reload();
+      });
+    };
+
+    $scope.rejectGroups = function () {
+      Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/groups/close/').put()
+        .then(function() {
+          console.log('groups close.');
           $state.reload();
       });
     };

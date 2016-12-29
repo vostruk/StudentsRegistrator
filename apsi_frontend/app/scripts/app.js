@@ -120,7 +120,7 @@ angular
         name : 'coursesDispl',
         url : '/courses',
         templateUrl: 'scripts/components/coursesList/courses.html',
-        controller: 'CoursesCtrl as courses'
+        controller: 'CoursesCtrl as CoursesCtrl'
     };
 
       var loginState = {

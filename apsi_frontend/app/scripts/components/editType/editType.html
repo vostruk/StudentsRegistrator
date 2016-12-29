@@ -13,6 +13,8 @@
       </div>
       <div style="padding-top: 10px">
 				 <button type="submit" class="btn btn-primary" ng-click="addTermine()">Dodaj Termin</button>
+         <button ng-if="!classType.group_open" type="submit" class="btn btn-primary" ng-click="acceptGroups()">Grupy: zezwól</button>
+         <button ng-if="classType.group_open" type="submit" class="btn btn-primary" ng-click="rejectGroups()">Grupy: zabroń</button>
       </div>
       <div id="termineForm" style="padding-top: 10px; visibility:{{setVisibility}};">
          <select  ng-options='o.name for o in week' ng-model="day"></select>
@@ -21,8 +23,7 @@
          <label for="ToInput">Do:</label>
          <input type="text" id="ToInput" placeholder="16:00" ng-model="toInput">
          <button type="submit" class="btn btn-primary" ng-click="saveTermine()">Zapisz Termin</button>
-         <button ng-if="!classType.group" type="submit" class="btn btn-primary" ng-click="acceptGroups()">Grupy: zezwól</button>
-         <button ng-if="classType.group" type="submit" class="btn btn-primary" ng-click="rejectGroups()">Grupy: zabroń</button>
+
       </div>
       <div style="padding-top: 10px">
         <table class="table table-striped">

@@ -96,10 +96,10 @@ angular.module('apsiFrontendApp')
         );
     };
 
-    $scope.manageGropus = function (courseId) {
-      $state.go('groupsManager',{courseid: courseId});
+    $scope.manageGropus = function (typeId) {
+      $state.go('groupsManager',{courseid: coursename, classid:typeId});
     };
-    
+
     $scope.goBack = function() {
       $state.go('studentCourses');
     };

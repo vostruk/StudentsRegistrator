@@ -7,6 +7,7 @@ angular.module('apsiFrontendApp')
 	.controller('GroupsManagerCtrl', function($scope, $state, courseCode, typeId, Restangular) {
     $scope.courseCode = courseCode;
     $scope.newGroupVisible = 'hidden';
+    $scope.groupName = null;
 
     Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/').get()  // Dawaj Grupy dla zajec
 			.then(function(classGroups) {
@@ -14,6 +15,7 @@ angular.module('apsiFrontendApp')
         $scope.isMyGroup = false;
           Restangular.oneUrl('coursesdd', 'http://localhost:8000/me/').get()  // Pobierz MNIE (usera)
             .then(function(me) {
+              $scope.me = me;
               for (var i = 0; i < classGroups.length; i++) {
                 if ($scope.classGroups[i].creator.id === me.id) {
                   $scope.isMyGroup = true;
@@ -28,11 +30,12 @@ angular.module('apsiFrontendApp')
       $scope.newGroupVisible = 'visible';
     };
 
-    $scope.submitGrupe = function () {
+    $scope.submitGrupe = function (name) {
+      console.log(name);
       var newGroup = {
-
+        name: name
       };
-      Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/').post('groups/',newGroup).then(
+      Restangular.oneUrl('asd','http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/').post('groups/',newGroup).then(
         function() {
           console.log('Created new Group.  ');
           $scope.newGroupVisible = 'hidden';
@@ -54,7 +57,7 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.removeGroup = function () {
-      Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeid+'/groups/'+$scope.myGroup.id+'/').remove().then(
+      Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/'+$scope.myGroup.id+'/').remove().then(
           function()
           {
             console.log('Group deleted');

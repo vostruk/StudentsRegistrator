@@ -1,15 +1,15 @@
 <div>
 	<form>
 		<div class="form-group">
-      <h2>Grupy przedmiotu: {{courseCode}}</h2>
       <div ng-if="!isMyGroup">
+        <h2>Grupy przedmiotu: {{courseCode}}</h2>
         <div style="padding-top: 10px">
           <button type="submit" class="btn btn-primary" ng-click="createGroup()">Utwórz Grupę</button>
         </div>
-        <div class="form-group" style="padding-top: 10px; visibility:{{newGroupVisible}} ">
+        <div class="form-group" style="padding-top: 10px; visibility: {{newGroupVisible}} ">
 				  <label for="nameInput">Nazwa Grupy:</label>
     			<input type="text" class="form-control" id="nameInput" placeholder="Nazwa grupy" ng-model="groupName">
-          <button type="submit" class="btn btn-primary" ng-click="submitGrupe()">Zatwierdź</button>
+          <button type="submit" class="btn btn-primary" ng-click="submitGrupe(groupName)">Zatwierdź</button>
 			  </div>
         <div style="padding-top: 10px">
           <table class="table table-striped">
@@ -24,12 +24,12 @@
               <td>{{y.creator.full_name}}</td>
               <td>
                 <table class="table table-striped">
-                  <tr ng-repeat="x in y.peoples">
+                  <tr ng-repeat="x in y.student_members">
                     <td>{{x.full_name}}</td>
                   </tr>
                 </table>
               </td>
-              <td>
+              <td class="text-right">
                   <button  ng-if="!y.registered" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="signToGroup(y.id)">
                     <span class="glyphicon glyphicon-edit"></span>
                   </button>
@@ -45,7 +45,7 @@
         </div>
         <div style="padding-top: 10px">
           <table class="table table-striped">
-            <tr ng-repeat="x in myGroup">
+            <tr ng-repeat="x in myGroup.student_members">
               <td>{{x.full_name}}</td>
             </tr>
           </table>
