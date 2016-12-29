@@ -68,4 +68,4 @@ class ClassTypeSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = ClassType
-        fields = ('id', 'name', 'time_slots')
+        fields = ('id', 'name', 'time_slots', 'groups')
