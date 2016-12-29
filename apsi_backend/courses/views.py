@@ -218,6 +218,10 @@ class TimeSlotViewSet(ModelViewSet):
                 data={'detail': 'user should be student'}
             )
         if request.method == 'PUT':
+            previous_user_slot = TimeSlot.objects.filter(class_type=time_slot.class_type, enrolled_students = user)
+            print(previous_user_slot)
+            if previous_user_slot:
+                previous_user_slot.first().enrolled_students.remove(user)
             time_slot.enrolled_students.add(user)
         if request.method == 'DELETE':
             time_slot.enrolled_students.remove(user)
