@@ -20,7 +20,12 @@ from rest_framework_nested.routers import NestedSimpleRouter
 from rest_framework.authtoken.views import obtain_auth_token
 
 from users.views import StudentsViewSet, TutorsViewSet, me
-from courses.views import CourseViewSet, ClassTypeViewSet, TimeSlotViewSet
+from courses.views import (
+    CourseViewSet,
+    ClassTypeViewSet,
+    GroupsViewSet,
+    TimeSlotViewSet,
+)
 from rest_framework_swagger.views import get_swagger_view
 
 schema_view = get_swagger_view(title='APSI groups API')
@@ -35,7 +40,7 @@ courses_router.register(r'class_types', ClassTypeViewSet, base_name='class-type'
 
 class_type_router = NestedSimpleRouter(courses_router, r'class_types', lookup='class_type')
 class_type_router.register(r'time_slots', TimeSlotViewSet, base_name='time-slot')
-
+class_type_router.register(r'groups', GroupsViewSet, base_name='group')
 
 urlpatterns = [
     url(r'me/', me),

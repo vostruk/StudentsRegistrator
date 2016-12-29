@@ -2,12 +2,13 @@ from rest_framework import serializers
 
 from courses.models import Course, ClassType, Group, TimeSlot
 from users.models import User
+from users.serializers import UserSerializer
 
 
 class CourseSerializer(serializers.ModelSerializer):
     registered = serializers.SerializerMethodField()
 
-    class Meta:
+    class Meta(object):
         model = Course
         fields = ('code', 'name', 'syllabus', 'tutor', 'registered', 'state')
 
@@ -27,13 +28,16 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class RegisteredStudentsSerializer(serializers.Serializer):
-    students = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(type=User.Type.STUDENT), many=True)
+    students = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.filter(type=User.Type.STUDENT),
+        many=True
+    )
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
     enrolled = serializers.SerializerMethodField()
 
-    class Meta:
+    class Meta(object):
         model = TimeSlot
         fields = ('id', 'day', 'time_start', 'time_end', 'enrolled')
 
@@ -44,9 +48,24 @@ class TimeSlotSerializer(serializers.ModelSerializer):
         return user in time_slot.enrolled_students.all()
 
 
+class GroupSerializer(serializers.ModelSerializer):
+    class_type = serializers.StringRelatedField()
+    student_members = UserSerializer(many=True, read_only=True)
+    is_registered = serializers.SerializerMethodField('get_registration_status')
+
+    class Meta(object):
+        model = Group
+        fields = ('class_type', 'student_members', 'is_registered', 'name')
+
+    def get_registration_status(self, obj):
+        user = self.context['request'].user
+        return user in obj.student_members.all()
+
+
 class ClassTypeSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotSerializer(many=True, read_only=True)
+    groups = GroupSerializer(many=True, read_only=True)
 
-    class Meta:
+    class Meta(object):
         model = ClassType
         fields = ('id', 'name', 'time_slots')
