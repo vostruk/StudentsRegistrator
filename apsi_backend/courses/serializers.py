@@ -51,7 +51,7 @@ class TimeSlotSerializer(serializers.ModelSerializer):
 class GroupSerializer(serializers.ModelSerializer):
     student_members = UserSerializer(many=True, read_only=True)
     is_registered = serializers.SerializerMethodField('get_registration_status')
-    creator = UserSerializer(required=False, read_only=True)
+    creator = UserSerializer(read_only=True)
 
     class Meta(object):
         model = Group
@@ -74,6 +74,7 @@ class GroupSerializer(serializers.ModelSerializer):
         group.creator = creator
         for student in members_data:
             group.student_members.add(student)
+        group.save()
         return group
 
 
