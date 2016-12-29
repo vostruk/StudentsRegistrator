@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import PermissionDenied
 
+from courses.exceptions import RegistrationClosedError
 from courses.serializers import (
     ClassTypeSerializer,
     CourseSerializer,
@@ -296,6 +297,13 @@ class GroupsViewSet(ModelViewSet):
 
     @detail_route(['PUT'], permission_classes=[StudentsOnlyPermissions])
     def register(self, request, course_pk, class_type_pk, pk):
+        course = Course.objects.filter(pk=course_pk).first()
+        if not course:
+            raise Http404
+
+        if not course.state == Course.State.REGISTRATION_OPENED:
+            raise RegistrationClosedError()
+
         group = self.get_object()
         groups = (
             request.user.attended_groups
@@ -312,9 +320,13 @@ class GroupsViewSet(ModelViewSet):
 
     @list_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
     def open(self, request, course_pk, class_type_pk):
-        class_type = ClassType.objects.filter(
-            pk=class_type_pk,
-            groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED
+        class_type = (
+            ClassType.objects
+            .filter(
+                pk=class_type_pk,
+                groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_OPEN
+            )
+            .first()
         )
 
         if not class_type:

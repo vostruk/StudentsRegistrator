@@ -15,6 +15,7 @@ class CourseFactory(factory.DjangoModelFactory):
     name = factory.Sequence(str)
     syllabus = factory.Sequence(str)
     tutor = factory.SubFactory(UserFactory, type=User.Type.TUTOR)
+    state = Course.State.REGISTRATION_OPENED
 
     class Meta(object):
         model = Course
