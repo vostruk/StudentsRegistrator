@@ -84,7 +84,7 @@ class ClassTypeSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'time_slots', 'groups', 'group_open')
 
     def get_group_status(self, obj):
-        if obj.group_status == ClassType.GroupsState.GROUPS_REGISTRATION_OPEN:
+        if obj.groups_state == ClassType.GroupsState.GROUPS_REGISTRATION_OPEN:
             return True
         else:
             return False
