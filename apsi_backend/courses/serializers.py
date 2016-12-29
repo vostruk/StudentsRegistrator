@@ -81,7 +81,7 @@ class ClassTypeSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = ClassType
-        fields = ('id', 'name', 'time_slots', 'groups')
+        fields = ('id', 'name', 'time_slots', 'groups', 'group_open')
 
     def get_group_status(self, obj):
         if obj.group_status == ClassType.GroupsState.GROUPS_REGISTRATION_OPEN:
