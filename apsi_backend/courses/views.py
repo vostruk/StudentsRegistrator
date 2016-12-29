@@ -43,6 +43,14 @@ class RestrictedPermissions(IsAuthenticated):
             return True
         return request.user.is_tutor()
 
+class RestrictedStudentPermissions(IsAuthenticated):
+    def has_permission(self, request, view):
+        if not super().has_permission(request, view):
+            return False
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_student()
+
 class StudentsOnlyPermissions(IsAuthenticated):
     def has_permission(self, request, view):
         if not super().has_permission(request, view):
@@ -250,7 +258,7 @@ class TimeSlotViewSet(ModelViewSet):
 
 class GroupsViewSet(ModelViewSet):
     serializer_class = GroupSerializer
-    permission_classes = (RestrictedPermissions,)
+    permission_classes = (RestrictedStudentPermissions,)
     model = Group
 
     def get_queryset(self):
