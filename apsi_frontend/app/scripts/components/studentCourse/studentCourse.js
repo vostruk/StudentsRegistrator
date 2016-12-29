@@ -83,7 +83,6 @@ angular.module('apsiFrontendApp')
 
 
     $scope.sign = function (type, termine) {
-
       Restangular.oneUrl('asdda','http://localhost:8000/courses/'+coursename+'/class_types/'+type+'/time_slots/'+termine+'/registration/').put().then(
             function()
             {
@@ -95,6 +94,10 @@ angular.module('apsiFrontendApp')
               console.log('Cannot register. ');
             }
         );
+    };
+
+    $scope.manageGropus = function (typeId) {
+      $state.go('groupsManager',{courseid: coursename, classid:typeId});
     };
 
     $scope.goBack = function() {
