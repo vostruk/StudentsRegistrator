@@ -5,19 +5,25 @@
 
 angular.module('apsiFrontendApp')
 	.controller('GroupsManagerCtrl', function($scope, $state, courseCode, typeId, Restangular) {
+    console.log("asfd");
     $scope.courseCode = courseCode;
     $scope.newGroupVisible = 'hidden';
     $scope.groupName = null;
-
+    console.log("asfd");
     Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/').get()  // Dawaj Grupy dla zajec
 			.then(function(classGroups) {
 			  $scope.classGroups = classGroups;
         $scope.isMyGroup = false;
+        console.log($scope.classGroups);
           Restangular.oneUrl('coursesdd', 'http://localhost:8000/me/').get()  // Pobierz MNIE (usera)
             .then(function(me) {
               $scope.me = me;
-              for (var i = 0; i < classGroups.length; i++) {
+              console.log("asfd");
+              for (var i = 0; i < $scope.classGroups.length; i++) {
+                console.log("asfd");
+                console.log($scope.classGroups[i].creator.id);
                 if ($scope.classGroups[i].creator.id === me.id) {
+                  console.log("Znaleziony");
                   $scope.isMyGroup = true;
                   $scope.myGroup = $scope.classGroups[i];
                   break;
