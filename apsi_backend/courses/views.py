@@ -324,7 +324,7 @@ class GroupsViewSet(ModelViewSet):
             ClassType.objects
             .filter(
                 pk=class_type_pk,
-                groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_OPEN
+                groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED
             )
             .first()
         )

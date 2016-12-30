@@ -176,7 +176,7 @@ class GroupsViewTestCase(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_close(self):
+    def test_close_open(self):
         response = self.client.put(
             reverse(
                 'group-close',
@@ -191,4 +191,19 @@ class GroupsViewTestCase(APITestCase):
         self.assertEqual(
             class_type.groups_state,
             ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED
+        )
+        response = self.client.put(
+            reverse(
+                'group-open',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        class_type = ClassType.objects.get(pk=self.group1.class_type.pk)
+        self.assertEqual(
+            class_type.groups_state,
+            ClassType.GroupsState.GROUPS_REGISTRATION_OPEN
         )
