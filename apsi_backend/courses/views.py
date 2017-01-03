@@ -7,6 +7,7 @@ from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import PermissionDenied
 
 from courses.exceptions import RegistrationClosedError
+from courses.exceptions import MaxNumberRegisteredError
 from courses.serializers import (
     ClassTypeSerializer,
     CourseSerializer,
@@ -228,7 +229,8 @@ class TimeSlotViewSet(ModelViewSet):
             )
         if request.method == 'PUT':
             previous_user_slot = TimeSlot.objects.filter(class_type=time_slot.class_type, enrolled_students = user)
-            print(previous_user_slot)
+            if time_slot.enrolled_students.count() >= time_slot.max_students_enrolled:
+                raise MaxNumberRegisteredError()
             if previous_user_slot:
                 previous_user_slot.first().enrolled_students.remove(user)
             time_slot.enrolled_students.add(user)
@@ -305,6 +307,10 @@ class GroupsViewSet(ModelViewSet):
             raise RegistrationClosedError()
 
         group = self.get_object()
+
+        if group.student_members.count() >= group.class_type.max_students_in_group:
+            raise MaxNumberRegisteredError()
+
         groups = (
             request.user.attended_groups
             .filter(

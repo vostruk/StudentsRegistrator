@@ -52,6 +52,7 @@ class GroupSerializer(serializers.ModelSerializer):
     student_members = UserSerializer(many=True, read_only=True)
     is_registered = serializers.SerializerMethodField('get_registration_status')
     creator = UserSerializer(read_only=True)
+    max_students_in_group = serializers.SerializerMethodField('get_max_students')
 
     class Meta(object):
         model = Group
@@ -60,8 +61,12 @@ class GroupSerializer(serializers.ModelSerializer):
             'creator',
             'student_members',
             'is_registered',
-            'name'
+            'name',
+            'max_students_in_group'
         )
+    
+    def get_max_students(self, obj):
+        return obj.class_type.max_students_in_group
 
     def get_registration_status(self, obj):
         user = self.context['request'].user
@@ -85,7 +90,7 @@ class ClassTypeSerializer(serializers.ModelSerializer):
 
     class Meta(object):
         model = ClassType
-        fields = ('id', 'name', 'time_slots', 'groups', 'group_open')
+        fields = ('id', 'name', 'time_slots', 'groups', 'group_open', 'max_students_in_group')
 
     def get_group_status(self, obj):
         if obj.groups_state == ClassType.GroupsState.GROUPS_REGISTRATION_OPEN:

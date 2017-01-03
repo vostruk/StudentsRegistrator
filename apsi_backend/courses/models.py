@@ -53,16 +53,13 @@ class ClassType(models.Model):
         choices=GROUPS_STATE_CHOICES,
         default=GroupsState.GROUPS_REGISTRATION_OPEN,
     )
+    max_students_in_group = models.IntegerField(default=2)
 
 
 class Group(models.Model):
-<<<<<<< HEAD
     class_type = models.ForeignKey(ClassType)
     student_members = models.ManyToManyField(User)
-    max_students_in_group = models.IntegerField()
-=======
     name = models.CharField(max_length=50)
-
     creator = models.ForeignKey(
         User,
         related_name='created_groups',
@@ -74,8 +71,6 @@ class Group(models.Model):
         User,
         related_name='attended_groups',
     )
-
->>>>>>> d93deced49ef0c1a8b0298f5ab61d4e2220f819e
 
 class TimeSlot(models.Model):
     class Day:
