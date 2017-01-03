@@ -87,13 +87,20 @@ class ClassTypeSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotSerializer(many=True, read_only=True)
     groups = GroupSerializer(many=True, read_only=True)
     group_open = serializers.SerializerMethodField('get_group_status')
-
+    time_slots_open = serializers.SerializerMethodField('get_time_slot_status')
+    
     class Meta(object):
         model = ClassType
-        fields = ('id', 'name', 'time_slots', 'groups', 'group_open', 'max_students_in_group')
+        fields = ('id', 'name', 'time_slots', 'groups', 'group_open', 'time_slots_open', 'max_students_in_group')
 
     def get_group_status(self, obj):
         if obj.groups_state == ClassType.GroupsState.GROUPS_REGISTRATION_OPEN:
+            return True
+        else:
+            return False
+
+    def get_time_slot_status(self, obj):
+        if obj.time_slots_state == ClassType.TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN:
             return True
         else:
             return False

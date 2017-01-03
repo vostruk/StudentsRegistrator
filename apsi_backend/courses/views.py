@@ -257,7 +257,42 @@ class TimeSlotViewSet(ModelViewSet):
         time_slot = self.get_object()
         response_serializer = UserSerializer(time_slot.enrolled_students.all(), many=True)
         return Response(response_serializer.data)
+    
+    @list_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
+    def open(self, request, course_pk, class_type_pk):
+        class_type = (
+            ClassType.objects
+            .filter(
+                pk=class_type_pk,
+                time_slots_state=ClassType.TimeSlotsState.TIMESLOTS_REGISTRATION_CLOSED
+            )
+            .first()
+        )
 
+        if not class_type:
+            raise Http404
+
+        class_type.time_slots_state = ClassType.TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN
+        class_type.save()
+        return Response({})
+
+    @list_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
+    def close(self, request, course_pk, class_type_pk):
+        class_type = (
+            ClassType.objects
+            .filter(
+                pk=class_type_pk,
+                time_slots_state=ClassType.TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN
+            )
+            .first()
+        )
+        
+        if not class_type:
+            raise Http404
+
+        class_type.time_slots_state = ClassType.TimeSlotsState.TIMESLOTS_REGISTRATION_CLOSED
+        class_type.save()
+        return Response({})
 
 class GroupsViewSet(ModelViewSet):
     serializer_class = GroupSerializer

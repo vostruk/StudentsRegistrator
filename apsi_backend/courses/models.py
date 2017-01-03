@@ -40,10 +40,16 @@ class ClassType(models.Model):
     class GroupsState:
         GROUPS_REGISTRATION_OPEN = 0
         GROUPS_REGISTRATION_CLOSED = 1
-
     GROUPS_STATE_CHOICES = (
         (GroupsState.GROUPS_REGISTRATION_OPEN, 'Rejestracja grup otwarta'),
         (GroupsState.GROUPS_REGISTRATION_CLOSED, 'Rejestracja grup zamknięta'),
+    )
+    class TimeSlotsState:
+        TIMESLOTS_REGISTRATION_OPEN = 0
+        TIMESLOTS_REGISTRATION_CLOSED = 1
+    TIMESLOT_STATE_CHOICES = (
+        (TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN, 'Rejestracja na terminy otwarta'),
+        (TimeSlotsState.TIMESLOTS_REGISTRATION_CLOSED, 'Rejestracja na terminy zamknięta'),
     )
 
     course = models.ForeignKey(Course)
@@ -53,8 +59,11 @@ class ClassType(models.Model):
         choices=GROUPS_STATE_CHOICES,
         default=GroupsState.GROUPS_REGISTRATION_OPEN,
     )
+    time_slots_state = models.IntegerField(
+        choices=TIMESLOT_STATE_CHOICES,
+        default=TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN,
+    )
     max_students_in_group = models.IntegerField(default=2)
-
 
 class Group(models.Model):
     class_type = models.ForeignKey(ClassType)
