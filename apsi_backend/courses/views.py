@@ -75,6 +75,12 @@ class CourseViewSet(ModelViewSet):
     
     REGISTRATION_OPENED = 0
     STUDENTS_LIST_ACCEPTED = 1
+
+    PATHS:
+    /clear_all_data - removes all groups and student lists of the course (tutor only)
+    /class_types - list of class types available
+    /registration - registration for a course (students only)
+    /registeres_students - list of a students registered for a course 
     """
 
     serializer_class = CourseSerializer
@@ -114,6 +120,28 @@ class CourseViewSet(ModelViewSet):
             serializer = self.get_serializer(instance)
 
         return Response(serializer.data)
+
+    @detail_route(['PUT'])
+    def clear_all_data(self, request, pk):
+
+        """ Removes all groups and student lists of the subject.
+            Leaves all time slots and course types untoched, coz they're usually stable from year to year. 
+            Can be used only after course registration is closed.
+        """
+
+        course = self.get_object()
+        #user = request.user
+        if course.state == Course.State.REGISTRATION_OPENED:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': 'Course must have close registration if you want to remove all students data'}
+            )
+        
+        Group.objects.all().delete()
+        for user in course.registered_students.all():
+            course.registered_students.remove(user)
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     @detail_route(['PUT', 'DELETE'], permission_classes=[StudentsOnlyPermissions])
     def registration(self, request, pk):
