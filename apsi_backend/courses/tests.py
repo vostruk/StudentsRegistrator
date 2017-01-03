@@ -1,16 +1,20 @@
 from django.test import TestCase
 from django.shortcuts import reverse
 from django.contrib.auth import get_user_model
-from django.contrib import auth
 from rest_framework import status
-from rest_framework.test import APIRequestFactory
-from rest_framework.test import force_authenticate
-from rest_framework.test import APIClient
-from rest_framework.authtoken.models import Token
-from courses.models import Course
+from rest_framework.test import APITestCase
+
+from courses.factories import (
+    ClassTypeFactory,
+    CourseFactory,
+    GroupFactory,
+)
+from courses.models import ClassType, Course, Group
+from users.factories import UserFactory
 
 
 User = get_user_model()
+
 
 class CoursesEndpointTest(TestCase):
     @classmethod
@@ -35,7 +39,7 @@ class CoursesEndpointTest(TestCase):
         #print(response.content)
         #self.client.logout()
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Course.objects.count(),1)
+        self.assertEqual(Course.objects.count(), 1)
         created_course = Course.objects.get(code="APSI")
         self.assertEqual(created_course.code, post_data['code'])
         self.assertEqual(created_course.name, post_data['name'])
@@ -67,3 +71,139 @@ class CoursesEndpointTest(TestCase):
         created_course.register_student(created_student)
         self.assertEqual(created_course.tutor, self.tutor_user)
         self.assertEqual(created_course.registered_students.count(), 1)
+
+
+class GroupsViewTestCase(APITestCase):
+    def setUp(self):
+        self.user = UserFactory(type=User.Type.TUTOR)
+        self.client.force_authenticate(self.user)
+        self.student1 = UserFactory(type=User.Type.STUDENT)
+        self.student2 = UserFactory(type=User.Type.STUDENT)
+        self.student3 = UserFactory(type=User.Type.STUDENT)
+        course = CourseFactory()
+        self.class_type = ClassTypeFactory(course=course)
+        self.group1 = GroupFactory(class_type=self.class_type)
+        self.group2 = GroupFactory(class_type=self.class_type)
+
+    def test_group_list(self):
+        response = self.client.get(
+            reverse(
+                'group-list',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                }
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data), 2)
+
+    def test_group_details(self):
+        response = self.client.get(
+            reverse(
+                'group-detail',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                    'pk': self.group1.pk,
+                }
+            )
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_group_add(self):
+        self.client.force_authenticate(self.student1)
+        response = self.client.post(
+            reverse(
+                'group-list',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                }
+            ),
+            data={
+                'name': 'test'
+            }
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        new_group = Group.objects.filter(name='test')
+        self.assertTrue(new_group.exists())
+
+    def test_register(self):
+        self.client.force_authenticate(self.student1)
+        response = self.client.put(
+            reverse(
+                'group-register',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                    'pk': self.group1.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        group1 = Group.objects.get(pk=self.group1.pk)
+        self.assertIn(self.student1, group1.student_members.all())
+        response = self.client.put(
+            reverse(
+                'group-register',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                    'pk': self.group2.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        group2 = Group.objects.get(pk=self.group2.pk)
+        self.assertIn(self.student1, group2.student_members.all())
+
+    def test_delete(self):
+        self.client.force_authenticate(self.student1)
+        group = GroupFactory(
+            class_type=self.class_type,
+            creator=self.student1
+        )
+        response = self.client.delete(
+            reverse(
+                'group-detail',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                    'pk': group.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_close_open(self):
+        response = self.client.put(
+            reverse(
+                'group-close',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        class_type = ClassType.objects.get(pk=self.group1.class_type.pk)
+        self.assertEqual(
+            class_type.groups_state,
+            ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED
+        )
+        response = self.client.put(
+            reverse(
+                'group-open',
+                kwargs={
+                    'course_pk': self.group1.class_type.course.pk,
+                    'class_type_pk': self.group1.class_type.pk,
+                }
+            ),
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        class_type = ClassType.objects.get(pk=self.group1.class_type.pk)
+        self.assertEqual(
+            class_type.groups_state,
+            ClassType.GroupsState.GROUPS_REGISTRATION_OPEN
+        )

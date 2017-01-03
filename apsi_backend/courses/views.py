@@ -1,12 +1,25 @@
+from django.http.response import Http404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import PermissionDenied
 
-from courses.serializers import CourseSerializer, RegisteredStudentsSerializer, ClassTypeSerializer, TimeSlotSerializer
-from courses.models import Course, ClassType, TimeSlot
+from courses.exceptions import RegistrationClosedError
+from courses.serializers import (
+    ClassTypeSerializer,
+    CourseSerializer,
+    GroupSerializer,
+    RegisteredStudentsSerializer,
+    TimeSlotSerializer,
+)
+from courses.models import (
+    ClassType,
+    Course,
+    Group,
+    TimeSlot,
+)
 from users.serializers import UserSerializer
 
 
@@ -30,6 +43,14 @@ class RestrictedPermissions(IsAuthenticated):
         if request.method in SAFE_METHODS:
             return True
         return request.user.is_tutor()
+
+class RestrictedStudentPermissions(IsAuthenticated):
+    def has_permission(self, request, view):
+        if not super().has_permission(request, view):
+            return False
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.is_student()
 
 class StudentsOnlyPermissions(IsAuthenticated):
     def has_permission(self, request, view):
@@ -200,7 +221,7 @@ class TimeSlotViewSet(ModelViewSet):
     def registration(self, request, course_pk, class_type_pk, pk):
         time_slot = self.get_object()
         user = request.user
-        if user.is_student()!=True:
+        if user.is_student() is not True:
             return Response(
                 status=status.HTTP_400_BAD_REQUEST,
                 data={'detail': 'user should be student'}
@@ -234,3 +255,105 @@ class TimeSlotViewSet(ModelViewSet):
         time_slot = self.get_object()
         response_serializer = UserSerializer(time_slot.enrolled_students.all(), many=True)
         return Response(response_serializer.data)
+
+
+class GroupsViewSet(ModelViewSet):
+    serializer_class = GroupSerializer
+    permission_classes = (RestrictedStudentPermissions,)
+    model = Group
+
+    def get_queryset(self):
+        return Group.objects.filter(class_type_id=self.kwargs['class_type_pk'])
+
+    def perform_create(self, serializer):
+        class_type = ClassType.objects.filter(
+            pk=self.kwargs['class_type_pk'],
+            groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_OPEN,
+        )
+
+        if not class_type:
+            raise Http404
+
+        groups = (
+            self.request.user.attended_groups
+            .filter(
+                class_type_id=self.kwargs['class_type_pk']
+            )
+        )
+        if groups.exists():
+            for group in groups:
+                group.student_members.remove(self.request.user)
+
+        serializer.save(
+            class_type_id=self.kwargs['class_type_pk'],
+            creator=self.request.user,
+            student_members=[self.request.user]
+        )
+
+    def perform_destroy(self, instance):
+        if instance.creator != self.request.user:
+            raise Http404
+        instance.delete()
+
+    @detail_route(['PUT'], permission_classes=[StudentsOnlyPermissions])
+    def register(self, request, course_pk, class_type_pk, pk):
+        course = Course.objects.filter(pk=course_pk).first()
+        if not course:
+            raise Http404
+
+        if not course.state == Course.State.REGISTRATION_OPENED:
+            raise RegistrationClosedError()
+
+        group = self.get_object()
+        groups = (
+            request.user.attended_groups
+            .filter(
+                class_type_id=self.kwargs['class_type_pk']
+            )
+        )
+        if groups.exists():
+            for old_group in groups:
+                old_group.student_members.remove(self.request.user)
+
+        group.student_members.add(request.user)
+        return Response({})
+
+    @list_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
+    def open(self, request, course_pk, class_type_pk):
+        class_type = (
+            ClassType.objects
+            .filter(
+                pk=class_type_pk,
+                groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED
+            )
+            .first()
+        )
+
+        if not class_type:
+            raise Http404
+
+        class_type.groups_state = ClassType.GroupsState.GROUPS_REGISTRATION_OPEN
+        class_type.save()
+
+        return Response({})
+
+    @list_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
+    def close(self, request, course_pk, class_type_pk):
+        class_type = (
+            ClassType.objects
+            .filter(
+                pk=class_type_pk,
+                groups_state=ClassType.GroupsState.GROUPS_REGISTRATION_OPEN
+            )
+            .first()
+        )
+
+        if not class_type:
+            raise Http404
+
+        class_type.groups_state = (
+            ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED
+        )
+        class_type.save()
+
+        return Response({})

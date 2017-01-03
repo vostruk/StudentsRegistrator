@@ -11,7 +11,7 @@ class Course(models.Model):
 
     STATE_CHOICES = (
         (State.REGISTRATION_OPENED, 'Rejestracja otwarta'),
-        (State.STUDENTS_LIST_ACCEPTED, 'Lista studentdów zaakceptowana'),
+        (State.STUDENTS_LIST_ACCEPTED, 'Lista studentów zaakceptowana'),
     )
 
     code = models.CharField(max_length=10, primary_key=True)
@@ -37,14 +37,45 @@ class Course(models.Model):
 
 
 class ClassType(models.Model):
+    class GroupsState:
+        GROUPS_REGISTRATION_OPEN = 0
+        GROUPS_REGISTRATION_CLOSED = 1
+
+    GROUPS_STATE_CHOICES = (
+        (GroupsState.GROUPS_REGISTRATION_OPEN, 'Rejestracja grup otwarta'),
+        (GroupsState.GROUPS_REGISTRATION_CLOSED, 'Rejestracja grup zamknięta'),
+    )
+
     course = models.ForeignKey(Course)
     name = models.CharField(max_length=50)
 
+    groups_state = models.IntegerField(
+        choices=GROUPS_STATE_CHOICES,
+        default=GroupsState.GROUPS_REGISTRATION_OPEN,
+    )
+
 
 class Group(models.Model):
+<<<<<<< HEAD
     class_type = models.ForeignKey(ClassType)
     student_members = models.ManyToManyField(User)
     max_students_in_group = models.IntegerField()
+=======
+    name = models.CharField(max_length=50)
+
+    creator = models.ForeignKey(
+        User,
+        related_name='created_groups',
+        null=True,
+        blank=True,
+    )
+    class_type = models.ForeignKey(ClassType, related_name='groups')
+    student_members = models.ManyToManyField(
+        User,
+        related_name='attended_groups',
+    )
+
+>>>>>>> d93deced49ef0c1a8b0298f5ab61d4e2220f819e
 
 class TimeSlot(models.Model):
     class Day:
