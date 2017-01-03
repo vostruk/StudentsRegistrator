@@ -44,7 +44,7 @@ class ClassType(models.Model):
 class Group(models.Model):
     class_type = models.ForeignKey(ClassType)
     student_members = models.ManyToManyField(User)
-
+    max_students_in_group = models.IntegerField()
 
 class TimeSlot(models.Model):
     class Day:
@@ -66,3 +66,4 @@ class TimeSlot(models.Model):
     day = models.IntegerField(choices=DAY_CHOICES)
     time_start = models.TimeField()
     time_end = models.TimeField()
+    max_students_enrolled = models.IntegerField()

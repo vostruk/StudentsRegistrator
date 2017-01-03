@@ -35,7 +35,7 @@ class TimeSlotSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TimeSlot
-        fields = ('id', 'day', 'time_start', 'time_end', 'enrolled')
+        fields = ('id', 'day', 'time_start', 'time_end', 'enrolled', 'max_students_enrolled')
 
     def get_enrolled(self, time_slot):
         user = self.context['request'].user
