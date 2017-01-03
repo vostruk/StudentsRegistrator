@@ -5,7 +5,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import PermissionDenied
-
+from rest_framework.exceptions import APIException
+from django.core.exceptions import ValidationError
 from courses.exceptions import RegistrationClosedError
 from courses.exceptions import MaxNumberRegisteredError
 from courses.serializers import (
@@ -245,7 +246,7 @@ class TimeSlotViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(class_type_id=self.kwargs['class_type_pk'])
-
+    
     @detail_route(['PUT', 'DELETE'], permission_classes=[StudentsOnlyPermissions])
     def registration(self, request, course_pk, class_type_pk, pk):
         time_slot = self.get_object()
@@ -256,12 +257,23 @@ class TimeSlotViewSet(ModelViewSet):
                 data={'detail': 'user should be student'}
             )
         if request.method == 'PUT':
+            collision_time_slots = TimeSlot.objects.filter(enrolled_students = user)
+            collided = list()
+            for ts in collision_time_slots:
+                if (ts.time_start>=time_slot.time_start and ts.time_start<time_slot.time_end) or (ts.time_end>time_slot.time_start and ts.time_end<=time_slot.time_end):
+                    collided.append((ts.class_type.name, ts.time_start, ts.time_end))
             previous_user_slot = TimeSlot.objects.filter(class_type=time_slot.class_type, enrolled_students = user)
             if time_slot.enrolled_students.count() >= time_slot.max_students_enrolled:
                 raise MaxNumberRegisteredError()
             if previous_user_slot:
                 previous_user_slot.first().enrolled_students.remove(user)
             time_slot.enrolled_students.add(user)
+            if collided:
+                return Response(
+                    status=status.HTTP_202_ACCEPTED,
+                    data={'detail': 'Masz kolizje terminów przy zapisie na ten termin: '+ str(collided)}
+                )
+
         if request.method == 'DELETE':
             time_slot.enrolled_students.remove(user)
         return Response(status=status.HTTP_204_NO_CONTENT)

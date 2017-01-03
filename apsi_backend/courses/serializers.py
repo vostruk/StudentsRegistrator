@@ -40,6 +40,16 @@ class TimeSlotSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = TimeSlot
         fields = ('id', 'day', 'time_start', 'time_end', 'enrolled', 'max_students_enrolled')
+    
+    def validate(self, data):
+        """
+        Check that the Start time is less than finish time.
+        """
+        start = data['time_start']
+        end = data['time_end']
+        if start>=end:
+            raise serializers.ValidationError('Finish time '+ str(end)+ ' cannot be less than start '+ str(start)+ ' time of the course')
+        return data
 
     def get_enrolled(self, time_slot):
         user = self.context['request'].user
