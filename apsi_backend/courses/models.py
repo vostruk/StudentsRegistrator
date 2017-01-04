@@ -52,7 +52,7 @@ class ClassType(models.Model):
         (TimeSlotsState.TIMESLOTS_REGISTRATION_CLOSED, 'Rejestracja na terminy zamknięta'),
     )
 
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, related_name='class_type')
     name = models.CharField(max_length=50)
 
     groups_state = models.IntegerField(
