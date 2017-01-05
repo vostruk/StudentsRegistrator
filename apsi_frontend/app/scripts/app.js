@@ -20,7 +20,7 @@ angular
     'ui.router',
     'restangular'
   ])
-  .config(function ($stateProvider,  $urlRouterProvider) {
+  .config(function ($stateProvider,  $urlRouterProvider, USER_ROLES) {
       var aboutState = {
           name : 'about',
           url : '/about',
@@ -40,6 +40,9 @@ angular
           typeId : function($stateParams) {
             return $stateParams.classid;
           }
+        },
+        data : {
+          authorization : true
         }
     };
 
@@ -55,6 +58,9 @@ angular
           typeId : function($stateParams) {
             return $stateParams.classid;
           }
+        },
+        data : {
+          authorization : true
         }
     };
 
@@ -67,6 +73,9 @@ angular
           courseCode : function($stateParams) {
             return $stateParams.courseid;
           }
+        },
+        data : {
+          authorization : true
         }
     };
 
@@ -75,6 +84,9 @@ angular
         url : '/courses/add',
         templateUrl: 'scripts/components/addCourse/addCourse.html',
         controller: 'AddCourseCtrl as managecourse',
+        data : {
+          authorization : true
+        }
     };
 
 
@@ -87,6 +99,9 @@ angular
           coursename : function($stateParams) {
             return $stateParams.courseid;
           }
+        },
+        data : {
+          authorization : true
         }
     };
 
@@ -94,14 +109,20 @@ angular
         name : 'registerToCourse',
         url : '/studentregister',
         templateUrl: 'scripts/components/registerToCourse/registerToCourse.html',
-        controller: 'RegisterToCourseCtrl as register'
+        controller: 'RegisterToCourseCtrl as register',
+        data : {
+          authorization : true
+        }
     };
 
     var studentCoursesState = {
         name : 'studentCourses',
         url : '/studentcourses',
         templateUrl: 'scripts/components/studentCoursesList/studentCourses.html',
-        controller: 'StudentCoursesCtrl as studentcourses'
+        controller: 'StudentCoursesCtrl as studentcourses',
+        data : {
+          authorization : true
+        }
     };
 
     var studentCourseState = {
@@ -113,6 +134,9 @@ angular
           coursename : function($stateParams) {
             return $stateParams.courseid;
           }
+        },
+        data : {
+          authorization : true
         }
     };
 
@@ -120,7 +144,10 @@ angular
         name : 'coursesDispl',
         url : '/courses',
         templateUrl: 'scripts/components/coursesList/courses.html',
-        controller: 'CoursesCtrl as CoursesCtrl'
+        controller: 'CoursesCtrl as CoursesCtrl',
+        data : {
+          authorization : true
+        }
     };
 
       var loginState = {
@@ -135,6 +162,9 @@ angular
       url : '/courses/{courseid}/students',
       templateUrl : 'scripts/components/studentList/studentList.html',
       controller : 'StudentListCtrl',
+      data : {
+        authorization : true
+      },
       resolve : {
           courseCode : function($stateParams) {
             return $stateParams.courseid;
@@ -160,3 +190,43 @@ angular
 
 
   });
+
+angular.module('apsiFrontendApp').run(function(_, $rootScope, $state, AuthService, $cookieStore, USER_ROLES) {
+      $rootScope.token = $cookieStore.get('djangotoken') || {};
+      //AuthService.set($rootScope.token);
+      if($rootScope.token !== null)
+      {
+          AuthService.initSession();
+      }
+      $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+          if(toState.name == 'login' &&  AuthService.isAuthenticate())
+          {
+            $state.go('coursesDispl');
+          }
+          if(toState.data !== undefined)
+            if(toState.data.authorization !== undefined && toState.data.authorization === true)
+            {
+               console.log('Zmiana autoryzacja: ' + AuthService.isAuthenticate() + "Posiada " + toState.data.authorization + ' ' + toState.name);
+               if (!AuthService.isAuthenticate() && toState.data.authorization) {
+                  $state.go('login');
+                }
+            }
+         
+      });
+      $rootScope.$on("loginSucces", function() {
+        if(AuthService.isAuthorized(USER_ROLES.student))
+        {
+           $state.go('studentCourses');
+        }
+        if(AuthService.isAuthorized(USER_ROLES.tutor))
+        {
+            $state.go('coursesDispl');
+        }
+        if(AuthService.isAuthorized(USER_ROLES.admin))
+        {
+            $state.go('coursesDispl');
+        }
+        
+      });
+  }
+);

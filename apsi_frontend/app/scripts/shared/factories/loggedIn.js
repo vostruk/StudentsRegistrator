@@ -7,7 +7,7 @@ angular.module('apsiFrontendApp').factory('LoggedInRestangular', function(Restan
 	var tokenSaved = null;
 	service.set  = function(token) {
 		instance = Restangular.withConfig(function() {
-		console.log('Start init for ', token);
+		//console.log('Start init for ', token);
 			tokenSaved = token;
 			$cookieStore.put('djangotoken', token);
 			$http.defaults.headers.common.Authorization = 'Token ' + token;
