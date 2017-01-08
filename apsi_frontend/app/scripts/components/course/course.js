@@ -105,8 +105,32 @@ angular.module('apsiFrontendApp')
 
  	  };
 
+ 	  $scope.clearData = function () {
+ 	    Restangular.oneUrl('clearData', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/clear_all_data').put().then(
+            function() {
+                console.log('Cleared course data');
+                $state.go('coursesDispl');
+            },
+            function() {
+                console.log('Cannot clear course data with opened registration');
+            }
+        );
+    };
+
     $scope.goBack = function() {
       $state.go('coursesDispl');
+    };
+
+    $scope.acceptTimeSlot = function(typeId, slotId) {
+ 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/class_types/'+typeId+'/time_slots/'+slotId+'/close').put().then(
+            function() {
+                console.log('Accepted time slot');
+                $state.reload()
+            },
+            function() {
+                console.log('Cannot accept time slot');
+            }
+        );
     };
 
     $scope.createType = function() {

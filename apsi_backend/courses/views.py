@@ -138,8 +138,8 @@ class CourseViewSet(ModelViewSet):
                 data={'detail': 'Course must have close registration if you want to remove all students data'}
             )
         
-        for cl in ClassType.objects.filter(course_id = course):
-            Group.objects.filter(class_type = cl).delete()
+        for cl in ClassType.objects.filter(course_id=course):
+            Group.objects.filter(class_type=cl).delete()
 
         for user in course.registered_students.all():
             course.registered_students.remove(user)

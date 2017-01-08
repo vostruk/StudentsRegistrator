@@ -36,7 +36,19 @@ angular.module('apsiFrontendApp')
       $scope.newGroupVisible = 'visible';
     };
 
-    $scope.submitGrupe = function (name) {
+    $scope.acceptGroup = function(groupId) {
+ 	    Restangular.oneUrl('acceptGroup', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/'+groupId+'/close').put().then(
+          function() {
+              console.log('Accepted group');
+              $state.reload();
+          },
+          function() {
+              console.log('Cannot accept group');
+          }
+        );
+    };
+
+    $scope.submitGroup = function (name) {
       console.log(name);
       var newGroup = {
         name: name
