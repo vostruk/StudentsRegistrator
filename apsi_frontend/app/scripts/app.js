@@ -191,7 +191,7 @@ angular
 
   });
 
-angular.module('apsiFrontendApp').run(function(_, $rootScope, $state, AuthService, $cookieStore, USER_ROLES) {
+angular.module('apsiFrontendApp').run(function( $rootScope, $state, AuthService, $cookieStore, USER_ROLES) {
       $rootScope.token = $cookieStore.get('djangotoken') || {};
       //AuthService.set($rootScope.token);
       if($rootScope.token !== null)
@@ -211,7 +211,7 @@ angular.module('apsiFrontendApp').run(function(_, $rootScope, $state, AuthServic
                   $state.go('login');
                 }
             }
-         
+
       });
       $rootScope.$on("loginSucces", function() {
         if(AuthService.isAuthorized(USER_ROLES.student))
@@ -226,7 +226,7 @@ angular.module('apsiFrontendApp').run(function(_, $rootScope, $state, AuthServic
         {
             $state.go('coursesDispl');
         }
-        
+
       });
   }
 );
