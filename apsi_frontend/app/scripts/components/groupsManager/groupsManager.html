@@ -6,31 +6,43 @@
         <div style="padding-top: 10px">
           <button type="submit" class="btn btn-primary" ng-click="createGroup()">Utwórz Grupę</button>
         </div>
-        <div class="form-group" style="padding-top: 10px; visibility: {{newGroupVisible}} ">
+        <div class="form-group" style="padding-top: 10px; visibility: {{newGroupVisible}}">
 				  <label for="nameInput">Nazwa Grupy:</label>
     			<input type="text" class="form-control" id="nameInput" placeholder="Nazwa grupy" ng-model="groupName">
           <button type="submit" class="btn btn-primary" ng-click="submitGroup(groupName)">Zatwierdź</button>
 			  </div>
+        <div class="form-group" style="padding-top: 10px">
+          <label for="studentID">ID studenta:</label>
+          <input type="text" class="form-control" id="studentID" ng-model="studentID">
+          <label for="newGroupID">ID nowej grupy:</label>
+          <input type="text" class="form-control" id="newGroupID" ng-model="newGroupID">
+          <button type="submit" class="btn btn-primary" ng-click="moveStudent(studentID, newGroupID)">Zatwierdź</button>
+        </div>
         <div style="padding-top: 10px">
           <table class="table table-striped">
             <tr>
+              <th>ID:</th>
               <th>Nazwa</th>
               <th>Twórca</th>
               <th>Skład</th>
               <th class="text-right" >Operacja</th>
             </tr>
             <tr ng-repeat="y in classGroups">
+              <td>{{y.id}}</td>
               <td>{{y.name}}</td>
               <td>{{y.creator.full_name}}</td>
               <td>
                 <table class="table table-striped">
                   <tr ng-repeat="x in y.student_members">
+                    <td>ID: {{x.id}}</td>
                     <td>{{x.full_name}}</td>
                   </tr>
                 </table>
               </td>
               <td class="text-right">
-                  <button type="submit" class="btn btn-primary" ng-click="acceptGroup(y.id)">Zaakceptuj grupę</button>
+                  <button ng-if="isTutor" type="button" class="btn btn-primary" ng-click="acceptGroup(y.id)">
+                    <span class="glyphicon glyphicon-ok"></span>
+                  </button>
                   <button  ng-if="!y.registered" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="signToGroup(y.id)">
                     <span class="glyphicon glyphicon-edit"></span>
                   </button>

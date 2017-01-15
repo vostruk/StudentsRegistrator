@@ -9,6 +9,8 @@ angular.module('apsiFrontendApp')
     $scope.courseCode = courseCode;
     $scope.newGroupVisible = 'hidden';
     $scope.groupName = null;
+    $scope.studentID = null;
+    $scope.newGroupID = null;
     console.log("asfd");
     Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/').get()  // Dawaj Grupy dla zajec
 			.then(function(classGroups) {
@@ -18,6 +20,9 @@ angular.module('apsiFrontendApp')
           Restangular.oneUrl('coursesdd', 'http://localhost:8000/me/').get()  // Pobierz MNIE (usera)
             .then(function(me) {
               $scope.me = me;
+              if (me.type = 1) {
+                $scope.isTutor = true;
+              }
               console.log("asfd");
               for (var i = 0; i < $scope.classGroups.length; i++) {
                 console.log("asfd");
@@ -64,6 +69,18 @@ angular.module('apsiFrontendApp')
           console.log('Cannot create Group.');
         }
       );
+    };
+
+    $scope.moveStudent = function(studentId, newGroupId) {
+      var data = {
+        'new_group_id': newGroupId,
+        'student_id': studentId
+      };
+      Restangular.oneUrl('moveStudent', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/move').put(data)
+        .then(function() {
+          console.log(groupId+' register');
+          $state.reload();
+      });
     };
 
     $scope.signToGroup = function (groupId) {

@@ -89,8 +89,11 @@ angular.module('apsiFrontendApp')
               console.log('registered:  ' +type+termine);
               $state.reload();
             },
-            function()
+            function(data, status)
             {
+              if (status==202) {
+                alert(data.details)
+              }
               console.log('Cannot register. ');
             }
         );

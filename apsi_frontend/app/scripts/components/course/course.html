@@ -1,6 +1,9 @@
 <div>
 	<h2>Edit {{courseDesc.code}}</h2>
-
+` <h3>
+    <button ng-if="isOpened" type="button" class="btn btn-default" ng-click="saveCourse(1)">Close registration</button>
+    <button ng-if="!isOpened" type="button" class="btn btn-default" ng-click="saveCourse(0)">Open registration</button>
+  </h3>
 	<form>
 		<div class="form-group">
 			<form>
@@ -51,9 +54,6 @@
                   <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
                   <td width="10%"><span style="color: grey; ">-</span></td>
                   <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
-                  <td>
-                    <button type="submit" class="btn btn-primary" ng-click="acceptTimeSlot(x.id, y.id)">Zaakceptuj termin</button>
-                  </td>
                 </tr>
               </table>
             </td>
@@ -63,6 +63,9 @@
               </button>
               <button type="button" class="btn btn-default btn-sm" ng-click="editType(x.id)">
                 <span class="glyphicon glyphicon-edit"></span>
+              </button>
+              <button type="submit" class="btn btn-primary" ng-click="acceptTimeSlot(x.id)">
+                <span class="glyphicon glyphicon-ok"></span>
               </button>
             </td>
           </tr>

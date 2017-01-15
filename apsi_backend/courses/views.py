@@ -336,6 +336,7 @@ class TimeSlotViewSet(ModelViewSet):
         class_type.save()
         return Response({})
 
+
 class GroupsViewSet(ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = (RestrictedStudentPermissions,)
