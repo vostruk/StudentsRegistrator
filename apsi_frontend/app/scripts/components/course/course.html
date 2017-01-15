@@ -1,34 +1,34 @@
 <div>
-	<h2>Edit {{courseDesc.code}}</h2>
+	<h2>Edytujesz {{courseDesc.code}}</h2>
 ` <h3>
-    <button ng-if="isOpened" type="button" class="btn btn-default" ng-click="saveCourse(1)">Close registration</button>
-    <button ng-if="!isOpened" type="button" class="btn btn-default" ng-click="saveCourse(0)">Open registration</button>
+    <button ng-if="isOpened" type="button" class="btn btn-default" ng-click="saveCourse(1)">Zamnknij rejestracje</button>
+    <button ng-if="!isOpened" type="button" class="btn btn-default" ng-click="saveCourse(0)">Otwórz rejestracje</button>
   </h3>
 	<form>
 		<div class="form-group">
 			<form>
 			<div class="form-group">
-				<label for="nameInput">Course name</label>
-    			<input type="text" class="form-control" id="nameInput" placeholder="Course name" ng-model="courseDesc.name">
+				<label for="nameInput">Nazwa kursu</label>
+    			<input type="text" class="form-control" id="nameInput" placeholder="Nazwa kursu" ng-model="courseDesc.name">
 			</div>
 
 			<div class="form-group">
-				<label for="descInput">Description</label>
-    			<textarea class="form-control" id="descInput" placeholder="Description" rows=5 ng-model="courseDesc.syllabus"> </textarea>
+				<label for="descInput">Opis</label>
+    			<textarea class="form-control" id="descInput" placeholder="Opis" rows=5 ng-model="courseDesc.syllabus"> </textarea>
 			</div>
 			<div>
         <select  class="form-control" ng-options='o.full_name for o in tutors' ng-model="courseDescSelectedTutor"></select>
       </div>
         <div align="right" style="padding-top: 10px">
-				 <button type="submit" class="btn btn-default" ng-click="goBack()">Cancel</button>
-         <button type="submit" class="btn btn-default" ng-click="clearData()">Clear data</button>
-				 <button type="submit" class="btn btn-primary" ng-click="saveCourse()">Save</button>
+				 <button type="submit" class="btn btn-default" ng-click="goBack()">Anuluj</button>
+         <button type="submit" class="btn btn-default" ng-click="clearData()">Czyść dane</button>
+				 <button type="submit" class="btn btn-primary" ng-click="saveCourse()">Zapisz</button>
       </div>
 
 			</form>
       <div style="padding-top: 10px">
         <a ui-sref="studentList({courseid: courseDesc.code})">
-         <button type="submit" class="btn btn-primary">Student List</button>
+         <button type="submit" class="btn btn-primary">Lista studentów</button>
         </a>
         <button type="submit" class="btn btn-primary" ng-click="createType()">Dodaj Zajęcia</button>
       </div>
@@ -41,7 +41,7 @@
             <th>Opis</th>
             <th>Grupy</th>
             <th>Terminy</th>
-            <th  class="text-right" >Operation</th>
+            <th  class="text-right" >Operacje</th>
           </tr>
           <tr ng-repeat="x in classType">
             <td style="color: grey">{{x.id}}</td>

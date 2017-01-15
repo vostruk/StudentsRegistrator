@@ -198,10 +198,30 @@ angular.module('apsiFrontendApp').run(function( $rootScope, $state, AuthService,
       {
           AuthService.initSession();
       }
+      $rootScope.toDefaultState = function() {
+        if(AuthService.isAuthorized(USER_ROLES.student))
+        {
+           $state.go('studentCourses');
+        } else
+        if(AuthService.isAuthorized(USER_ROLES.tutor))
+        {
+            $state.go('coursesDispl');
+        } else
+        if(AuthService.isAuthorized(USER_ROLES.admin))
+        {
+            $state.go('coursesDispl');
+        }
+        else
+        {
+           $state.go('login');
+        }
+      }
+    
+
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
           if(toState.name == 'login' &&  AuthService.isAuthenticate())
           {
-            $state.go('coursesDispl');
+            $rootScope.toDefaultState();
           }
           if(toState.data !== undefined)
             if(toState.data.authorization !== undefined && toState.data.authorization === true)
@@ -214,18 +234,7 @@ angular.module('apsiFrontendApp').run(function( $rootScope, $state, AuthService,
 
       });
       $rootScope.$on("loginSucces", function() {
-        if(AuthService.isAuthorized(USER_ROLES.student))
-        {
-           $state.go('studentCourses');
-        }
-        if(AuthService.isAuthorized(USER_ROLES.tutor))
-        {
-            $state.go('coursesDispl');
-        }
-        if(AuthService.isAuthorized(USER_ROLES.admin))
-        {
-            $state.go('coursesDispl');
-        }
+         $rootScope.toDefaultState();
 
       });
   }

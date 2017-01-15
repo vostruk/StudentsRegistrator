@@ -1,20 +1,17 @@
 <div>
-	<h4> Login Page </h4>
+	<h4> Logowanie </h4>
 	<form ng-submit="getCred()">
 	  <div style = "margin-top: 10px"  class="input-group" class="form-horizontal" role="form">
 	    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-	    <input id="login-name" ng-model="username" type="text" class="form-control" placeholder="Username">
+	    <input id="login-name" ng-model="username" type="text" class="form-control" placeholder="Nazwa użytkownika">
 	  </div>
 	  <div style = "margin-top: 5px" class="input-group" class="form-horizontal" role="form">
 	   <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-	    <input id = "login-password" ng-model="password" type="password" class="form-control" placeholder="Password">
+	    <input id = "login-password" ng-model="password" type="password" class="form-control" placeholder="Hasło">
 	  </div>
 	  <div style = "margin-top: 15px" class="form-group">
-	  	<button type="submit" class="btn btn-primary">Login</button>
+	  	<button type="submit" class="btn btn-primary">Zaloguj</button>
 	  </div>
 	 </form>
-	  <div>
-	  {{out}}
-	  </div>
 
 </div>

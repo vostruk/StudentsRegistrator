@@ -46,13 +46,13 @@
             </ul>
             -->
              <ul class="nav navbar-nav nav-pills navbar-right">
-              <li ui-sref-active="login"><a ng-show="!isAuthenticate()" ui-sref="login">Login</a></li>     
-              <li><a ng-show="isAuthenticate()" ng-click="logout()" style="cursor: pointer;">Logout</a></li>   
+              <li ui-sref-active="login"><a ng-show="!isAuthenticate()" ui-sref="login">Zaloguj</a></li>     
+              <li><a ng-show="isAuthenticate()" ng-click="logout()" style="cursor: pointer;">Wyloguj</a></li>   
               
             </ul>
             <ul class = "nav navbar-nav navbar-right">
               <li>
-                <p ng-show="isAuthenticate()" class="navbar-text">You are logged as: {{getUserName()}}</p>
+                <p ng-show="isAuthenticate()" class="navbar-text">Jesteś zalogowany jako: {{getUserName()}}</p>
               </li> 
             </ul>
 

@@ -1,28 +1,26 @@
 <div>
 <h2>
-Student List
+Lista studentów
 </h2>
 
 <table class="table table-striped">
 	<tr>
-		<th>Username</th>
-		<th>Full name</th>
-		<th  class="text-right" >Operation</th>
+		<th>Nazwa użytkownika</th>
+		<th>Imię i nazwisko</th>
+		<th  class="text-right" >Operacje</th>
 	</tr>
 	<tr ng-repeat="student in students">
 		<td>{{student.username}}</td>
 		<td>{{student.full_name}}</td>
 		<td class="text-right" > 
-			<button type="button" class="btn btn-default btn-sm">
-				<span class="glyphicon glyphicon-remove"></span>
+			<button type="button" class="btn btn-default btn-sm" ng-click="remove(student.username)">
+				<span class="glyphicon glyphicon-remove" ></span>
 			</button>
 		</td>
 	</tr>
 
 </table>
 
-<button type="submit" class="btn btn-default" ng-click="back()">Back</button> 
- <button type="submit" class="btn btn-success text-right" ng-click="close()">{{closingButtonText}}</button>
-
+<button type="submit" class="btn btn-default" ng-click="back()">Wróć</button> 
 
 </div>
