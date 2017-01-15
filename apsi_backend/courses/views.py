@@ -1,10 +1,11 @@
 from django.http.response import Http404
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.permissions import IsAuthenticated, SAFE_METHODS
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.mixins import ListModelMixin
 from rest_framework.exceptions import APIException
 from django.core.exceptions import ValidationError
 from courses.exceptions import RegistrationClosedError
@@ -23,6 +24,7 @@ from courses.models import (
     TimeSlot,
 )
 from users.serializers import UserSerializer
+from users.models import User
 
 
 class CoursesPermissions(IsAuthenticated):
@@ -164,28 +166,22 @@ class CourseViewSet(ModelViewSet):
             course.registered_students.remove(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    @detail_route(['GET', 'POST', 'DELETE'])
-    def registered_students(self, request, pk):
 
-        """ Shows the list of students registered for that course (can be only seen by tutor). """
+class RegisteredStudentsViewSet(ListModelMixin, GenericViewSet):
+    serializer_class = UserSerializer
 
-        course = self.get_object()
-        if request.method == 'GET':
-            response_serializer = UserSerializer(course.registered_students.all(), many=True)
-            return Response(response_serializer.data)
+    def get_queryset(self):
+        return User.objects.filter(courses_attended=self.kwargs['course_pk'])
 
-        students_serializer = RegisteredStudentsSerializer(data=request.data)
-        students_serializer.is_valid(raise_exception=True)
-        students = students_serializer.validated_data['students']
+    def update(self, request, *args, **kwargs):
+        student = User.objects.get(pk=kwargs['pk'])
+        student.courses_attended.add(self.kwargs['course_pk'])
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
-        if request.method == 'POST':
-            course.registered_students.add(*students)
-        if request.method == 'DELETE':
-            course.registered_students.remove(*students)
-
-        course = self.get_object()
-        response_serializer = UserSerializer(course.registered_students.all(), many=True)
-        return Response(response_serializer.data)
+    def destroy(self, request, *args, **kwargs):
+        student = self.get_object()
+        student.courses_attended.remove(self.kwargs['course_pk'])
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ClassTypeViewSet(ModelViewSet):
