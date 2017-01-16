@@ -71,6 +71,8 @@ angular.module('apsiFrontendApp')
 			  $scope.courseDesc = course;
         if (course.state == 0) {
           $scope.isOpened = true;
+        } else {
+          $scope.isOpened = false;
         }
         courseData = $scope.courseDesc;
         Restangular.oneUrl('coursesdd', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}

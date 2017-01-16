@@ -6,7 +6,9 @@
 			<div class="form-group">
 				<label for="nameInput">Nazwa zajęć:</label>
     			<input type="text" class="form-control" id="nameInput" placeholder="Course name" ng-model="classType.name">
-			</div>
+			  <label for="nameInput">Liczba studentów w grupie</label>
+    			<input type="text" class="form-control" id="maxStudentsGroup" placeholder="" ng-model="classType.max_students_in_group">
+      </div>
       <div align="right" style="padding-top: 10px">
 				 <button type="submit" class="btn btn-default" ng-click="goBack()">Wróć</button>
 				 <button type="submit" class="btn btn-primary" ng-click="editType()">Zapisz</button>
@@ -22,6 +24,7 @@
          <input type="text" id="FromInput" placeholder="15:00" ng-model="fromInput">
          <label for="ToInput">Do:</label>
          <input type="text" id="ToInput" placeholder="16:00" ng-model="toInput">
+         <input type="text" id="MaxStudents" placeholder="Liczba studentów" ng-model="maxStudents">
          <button type="submit" class="btn btn-primary" ng-click="saveTermine()">Zapisz Termin</button>
 
       </div>

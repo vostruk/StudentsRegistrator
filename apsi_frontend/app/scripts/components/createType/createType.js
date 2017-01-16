@@ -11,7 +11,11 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.saveType = function() {
-      Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename).post('class_types/',{name: $scope.typeName})
+      var data = {
+        name: $scope.typeName,
+        max_students_in_group: $scope.maxStudents
+      };
+      Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename).post('class_types/', data)
         .then(
           function() {
           console.log('Created:  ' + $scope.typeName);

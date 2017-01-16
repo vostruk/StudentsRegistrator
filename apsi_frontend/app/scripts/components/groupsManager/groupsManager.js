@@ -42,7 +42,7 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.acceptGroup = function(groupId) {
- 	    Restangular.oneUrl('acceptGroup', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/'+groupId+'/close').put().then(
+ 	    Restangular.oneUrl('acceptGroup', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/close').put().then(
           function() {
               console.log('Accepted group');
               $state.reload();

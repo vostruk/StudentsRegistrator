@@ -87,7 +87,8 @@ angular.module('apsiFrontendApp')
       var termine = {
         day: $scope.day.id,
         time_start: $scope.fromInput,
-        time_end: $scope.toInput
+        time_end: $scope.toInput,
+        max_students_enrolled: $scope.maxStudents
       };
       Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/').post('time_slots/',termine).then(
           function() {
