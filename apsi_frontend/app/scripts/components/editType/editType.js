@@ -84,8 +84,8 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.moveStudent = function() {
-      Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/groups/'+$scope.groupNumber+'/move_student/')
-        .put({'student_id': $scope.studentID})
+      Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/groups/'+$scope.groupNumber+'/')
+        .post('move_student/', {'student_id': $scope.studentID})
         .then(
             function()
             {

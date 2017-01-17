@@ -15,7 +15,9 @@
       </div>
       <div style="padding-top: 10px">
         <h4>Zmień grupę studenta</h4>
-        <select ng-options="student as student.username for student in students" style="display: inline-block"></select>
+        <select style="display: inline-block" ng-model="studentID">
+          <option ng-repeat="student in students" value="{{ student.id }}">{{ student.username }}</option>
+        </select>
         <input style="width: 150px; display: inline-block;" type="text" class="form-control" id="groupNumber" placeholder="Numer grupy" ng-model="groupNumber">
         <button type="button" class="btn btn-primary" ng-click="moveStudent()">Zmień</button>
       </div>

@@ -398,13 +398,13 @@ class GroupsViewSet(ModelViewSet):
         group.student_members.add(request.user)
         return Response({})
 
-    @detail_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
+    @detail_route(['POST'], permission_classes=[TutorsOnlyPermissions])
     def move_student(self, request, course_pk, class_type_pk, pk):
         course = Course.objects.filter(pk=course_pk).first()
         if not course:
             raise Http404
 
-        student_id = self.request.POST.get('student_id')
+        student_id = int(request.data.get('student_id'))
         user = User.objects.filter(pk=student_id)
         if not user:
             raise Http404
