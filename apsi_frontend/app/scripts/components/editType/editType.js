@@ -58,6 +58,13 @@ angular.module('apsiFrontendApp')
           }
         );
 
+    Restangular.oneUrl('asd','http://localhost:8000/students/').get()
+        .then( function(students) {
+            console.log('Get student list');
+            $scope.students = students;
+          }
+        );
+
     $scope.goBack = function() {
       $state.go('courseedit', {courseid: coursename});
     };
@@ -76,6 +83,21 @@ angular.module('apsiFrontendApp')
         );
     };
 
+    $scope.moveStudent = function() {
+      Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/groups/'+$scope.groupNumber+'/move_student/')
+        .put({'student_id': $scope.studentID})
+        .then(
+            function()
+            {
+              console.log('Moved student');
+              $state.go('courseedit', {courseid:coursename});
+            },
+            function()
+            {
+              console.log('Cannot move student. ' );
+            }
+        );
+    };
 
     $scope.day = $scope.week[0];
 

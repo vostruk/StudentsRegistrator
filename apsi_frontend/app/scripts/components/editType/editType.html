@@ -14,9 +14,16 @@
 				 <button type="submit" class="btn btn-primary" ng-click="editType()">Zapisz</button>
       </div>
       <div style="padding-top: 10px">
+        <h4>Zmień grupę studenta</h4>
+        <select ng-options="student as student.username for student in students" style="display: inline-block"></select>
+        <input style="width: 150px; display: inline-block;" type="text" class="form-control" id="groupNumber" placeholder="Numer grupy" ng-model="groupNumber">
+        <button type="button" class="btn btn-primary" ng-click="moveStudent()">Zmień</button>
+      </div>
+      <div style="padding-top: 50px">
 				 <button type="submit" class="btn btn-primary" ng-click="addTermine()">Dodaj Termin</button>
          <button ng-if="!classType.group_open" type="submit" class="btn btn-primary" ng-click="acceptGroups()">Grupy: zezwól</button>
          <button ng-if="classType.group_open" type="submit" class="btn btn-primary" ng-click="rejectGroups()">Grupy: zabroń</button>
+         <button type="submit" class="btn btn-primary" ng-click="rejectGroups()">Akceptuj listy w grupach</button>
       </div>
       <div id="termineForm" style="padding-top: 10px; visibility:{{setVisibility}};">
          <select  ng-options='o.name for o in week' ng-model="day"></select>

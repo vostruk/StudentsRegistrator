@@ -128,7 +128,7 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.acceptTimeSlot = function(typeId, slotId) {
- 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/class_types/'+typeId+'/time_slots/close').put().then(
+ 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/class_types/'+typeId+'/time_slots/close/').put().then(
             function() {
                 console.log('Accepted time slot');
                 $state.reload()

@@ -398,6 +398,32 @@ class GroupsViewSet(ModelViewSet):
         group.student_members.add(request.user)
         return Response({})
 
+    @detail_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
+    def move_student(self, request, course_pk, class_type_pk, pk):
+        course = Course.objects.filter(pk=course_pk).first()
+        if not course:
+            raise Http404
+
+        student_id = self.request.POST.get('student_id')
+        user = User.objects.filter(pk=student_id)
+        if not user:
+            raise Http404
+
+        group = self.get_object()
+
+        groups = (
+            user.attended_groups
+            .filter(
+                class_type_id=self.kwargs['class_type_pk']
+            )
+        )
+        if groups.exists():
+            for old_group in groups:
+                old_group.student_members.remove(user)
+
+        group.student_members.add(user)
+        return Response({})
+
     @list_route(['PUT'], permission_classes=[TutorsOnlyPermissions])
     def open(self, request, course_pk, class_type_pk):
         class_type = (
