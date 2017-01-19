@@ -8,34 +8,7 @@ angular.module('apsiFrontendApp').factory('AuthService', function(Restangular, $
         $http.defaults.headers.common.Authorization = '';
     
     };
-    /*
-    instance.login = function(_username, _password)
-    {
-         var loginData = {
-            username : _username,
-            password : _password
-         };
-         Restangular.oneUrl('login', 'http://localhost:8000/').post('login/', loginData).then(
-          function(response)
-          {
-            console.log('You are logged your tokes is :', response.token);
-            this.set(response.token);
-            /*Restangular.oneUrl('courses', 'http://localhost:8000/me/').get()
-          .then(function(me) {
-            if(me.type === 1){
-               $state.go('coursesDispl');
-            }
-            if(me.type === 0){
-               $state.go('studentCourses');
-            }
-            console.log('I gowno :', response.token);
-            this.initSession();
-          },
-          function() {
-            this.logout();
-            console.log('Cannot log into system');
-          });
-    }; */
+   
     instance.set  = function(token) {
         Restangular.withConfig(function() {
             console.log('Start init for ', token);
@@ -59,8 +32,6 @@ angular.module('apsiFrontendApp').factory('AuthService', function(Restangular, $
         Restangular.oneUrl('courses', 'http://localhost:8000/me/').get()  // GET: /me/
         .then(function(response) {
 
-         
-           
             userData = response;
 
             var role = USER_ROLES.public;
@@ -92,43 +63,6 @@ angular.module('apsiFrontendApp').factory('AuthService', function(Restangular, $
     };
     
     instance.isAuthenticate = function() {
-      /*  var tokenValue = $cookieStore.get('djangotoken');
-        
-        if(tokenValue) {
-            Restangular.withConfig(function() {        
-                $http.defaults.headers.common.Authorization = 'Token ' + tokenValue;
-            });
-        }
-
-        var connect = false;
-        Restangular.oneUrl('courses', 'http://localhost:8000/me/').get()  // GET: /me/
-        .then(function(response) {
-            connect = true;
-            userData = response;
-
-            var role = USER_ROLES.public;
-            switch(response.type)
-            {
-                case 0:
-                role = USER_ROLES.student;
-                break;
-                case 1:
-                role = USER_ROLES.tutor;
-                break;
-                case 2:
-                role = USER_ROLES.admin;
-                break;
-            }
-            Session.create(tokenValue, response.id, role, response.username);
-        },
-        function() 
-        { 
-            this.logout();
-            //Session.clear();
-            //$cookieStore.remove('djangotoken');
-        }
-        );
-        return connect;*/
         return !!Session.userId;
     };
     
@@ -160,5 +94,7 @@ angular.module('apsiFrontendApp').factory('AuthService', function(Restangular, $
     instance.isAdmin = function() {
         return userData.type === 2;
     };
+
+
     return instance;
 });

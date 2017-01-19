@@ -6,15 +6,26 @@
 			<div class="form-group">
 				<label for="nameInput">Nazwa zajęć:</label>
     			<input type="text" class="form-control" id="nameInput" placeholder="Course name" ng-model="classType.name">
-			</div>
+			  <label for="nameInput">Liczba studentów w grupie</label>
+    			<input type="text" class="form-control" id="maxStudentsGroup" placeholder="" ng-model="classType.max_students_in_group">
+      </div>
       <div align="right" style="padding-top: 10px">
 				 <button type="submit" class="btn btn-default" ng-click="goBack()">Wróć</button>
 				 <button type="submit" class="btn btn-primary" ng-click="editType()">Zapisz</button>
       </div>
       <div style="padding-top: 10px">
+        <h4>Zmień grupę studenta</h4>
+        <select style="display: inline-block" ng-model="studentID">
+          <option ng-repeat="student in students" value="{{ student.id }}">{{ student.username }}</option>
+        </select>
+        <input style="width: 150px; display: inline-block;" type="text" class="form-control" id="groupNumber" placeholder="Numer grupy" ng-model="groupNumber">
+        <button type="button" class="btn btn-primary" ng-click="moveStudent()">Zmień</button>
+      </div>
+      <div style="padding-top: 50px">
 				 <button type="submit" class="btn btn-primary" ng-click="addTermine()">Dodaj Termin</button>
          <button ng-if="!classType.group_open" type="submit" class="btn btn-primary" ng-click="acceptGroups()">Grupy: zezwól</button>
          <button ng-if="classType.group_open" type="submit" class="btn btn-primary" ng-click="rejectGroups()">Grupy: zabroń</button>
+         <button type="submit" class="btn btn-primary" ng-click="rejectGroups()">Akceptuj listy w grupach</button>
       </div>
       <div id="termineForm" style="padding-top: 10px; visibility:{{setVisibility}};">
          <select  ng-options='o.name for o in week' ng-model="day"></select>
@@ -22,6 +33,7 @@
          <input type="text" id="FromInput" placeholder="15:00" ng-model="fromInput">
          <label for="ToInput">Do:</label>
          <input type="text" id="ToInput" placeholder="16:00" ng-model="toInput">
+         <input type="text" id="MaxStudents" placeholder="Liczba studentów" ng-model="maxStudents">
          <button type="submit" class="btn btn-primary" ng-click="saveTermine()">Zapisz Termin</button>
 
       </div>
@@ -31,7 +43,7 @@
             <th>Dzień</th>
             <th>Od</th>
             <th>Do</th>
-            <th class="text-right" >Operation</th>
+            <th class="text-right" >Operacje</th>
           </tr>
           <tr ng-repeat="y in termines">
             <td>{{y.day}}</td>

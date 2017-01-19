@@ -63,7 +63,7 @@ class ClassType(models.Model):
         choices=TIMESLOT_STATE_CHOICES,
         default=TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN,
     )
-    max_students_in_group = models.IntegerField(default=2)
+    max_students_in_group = models.IntegerField()
 
 class Group(models.Model):
     class_type = models.ForeignKey(ClassType)

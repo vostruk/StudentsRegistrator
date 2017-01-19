@@ -11,13 +11,6 @@
     			<input type="text" class="form-control" id="nameInput" placeholder="Nazwa grupy" ng-model="groupName">
           <button type="submit" class="btn btn-primary" ng-click="submitGroup(groupName)">Zatwierdź</button>
 			  </div>
-        <div ng-if="meMe.type == 1" class="form-group" style="padding-top: 10px">
-          <label for="studentID">ID studenta:</label>
-          <input type="text" class="form-control" id="studentID" ng-model="studentID">
-          <label for="newGroupID">ID nowej grupy:</label>
-          <input type="text" class="form-control" id="newGroupID" ng-model="newGroupID">
-          <button type="submit" class="btn btn-primary" ng-click="moveStudent(studentID, newGroupID)">Zatwierdź</button>
-        </div>
         <div style="padding-top: 10px">
           <table class="table table-striped">
             <tr>
@@ -40,10 +33,7 @@
                 </table>
               </td>
               <td class="text-right">
-                  <button ng-if="meMe.type == 1" type="button" class="btn btn-primary" ng-click="acceptGroup(y.id)">
-                    <span class="glyphicon glyphicon-ok"></span>
-                  </button>
-                  <button  ng-if="!y.registered && meMe.type != 1" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="signToGroup(y.id)">
+                  <button  ng-if="!y.registered" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="signToGroup(y.id)">
                     <span class="glyphicon glyphicon-edit"></span>
                   </button>
               </td>

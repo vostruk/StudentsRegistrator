@@ -25,6 +25,7 @@ from courses.views import (
     ClassTypeViewSet,
     GroupsViewSet,
     TimeSlotViewSet,
+    RegisteredStudentsViewSet,
 )
 from rest_framework_swagger.views import get_swagger_view
 
@@ -37,6 +38,7 @@ router.register(r'courses', CourseViewSet, base_name='course')
 
 courses_router = NestedSimpleRouter(router, r'courses', lookup='course')
 courses_router.register(r'class_types', ClassTypeViewSet, base_name='class-type')
+courses_router.register(r'registered_students', RegisteredStudentsViewSet, base_name='registered-students')
 
 class_type_router = NestedSimpleRouter(courses_router, r'class_types', lookup='class_type')
 class_type_router.register(r'time_slots', TimeSlotViewSet, base_name='time-slot')

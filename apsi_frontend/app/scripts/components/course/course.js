@@ -5,7 +5,7 @@ angular.module('apsiFrontendApp')
     $scope.week = [
       {
         id: 0,
-        name: 'Poniedzialek'
+        name: 'Poniedziałek'
       },
       {
         id: 1,
@@ -13,7 +13,7 @@ angular.module('apsiFrontendApp')
       },
       {
         id: 2,
-        name: 'Sroda'
+        name: 'Środa'
       },
       {
         id: 3,
@@ -21,7 +21,7 @@ angular.module('apsiFrontendApp')
       },
       {
         id: 4,
-        name: 'Piatek'
+        name: 'Piątek'
       }
     ];
     $scope.i = 0;
@@ -46,7 +46,7 @@ angular.module('apsiFrontendApp')
         console.log('types: '+classType);
         $scope.classType = classType;
         for (var i=0; i < classType.length; i++) {
-          $scope.classType[i].time_slots = dayFormat($scope.classType[i].time_slots);
+          $scope.classType[i].time_slots = dayFormat-($scope.classType[i].time_slots);
         }
 	 	});
 
@@ -71,6 +71,8 @@ angular.module('apsiFrontendApp')
 			  $scope.courseDesc = course;
         if (course.state == 0) {
           $scope.isOpened = true;
+        } else {
+          $scope.isOpened = false;
         }
         courseData = $scope.courseDesc;
         Restangular.oneUrl('coursesdd', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}
@@ -86,14 +88,14 @@ angular.module('apsiFrontendApp')
 
      $scope.saveCourse = function(state) {
        state = typeof state !== 'undefined' ? state : $scope.courseDesc.state;
-  		var loginData = {
-            code: $scope.courseDesc.code,
-            name: $scope.courseDesc.name,
-            syllabus: $scope.courseDesc.syllabus,
-            tutor: $scope.courseDescSelectedTutor.id,
-            registered: null,
-            state: state
-      };
+    		var loginData = {
+              code: $scope.courseDesc.code,
+              name: $scope.courseDesc.name,
+              syllabus: $scope.courseDesc.syllabus,
+              tutor: $scope.courseDescSelectedTutor.id,
+              registered: null,
+              state: state
+        };
 
         Restangular.oneUrl('asdda','http://localhost:8000/courses/'+$scope.courseDesc.code+'/').patch(loginData).then(
             function()
@@ -126,7 +128,7 @@ angular.module('apsiFrontendApp')
     };
 
     $scope.acceptTimeSlot = function(typeId, slotId) {
- 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/class_types/'+typeId+'/time_slots/close').put().then(
+ 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/class_types/'+typeId+'/time_slots/close/').put().then(
             function() {
                 console.log('Accepted time slot');
                 $state.reload()

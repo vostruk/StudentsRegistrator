@@ -84,16 +84,16 @@ angular.module('apsiFrontendApp')
 
     $scope.sign = function (type, termine) {
       Restangular.oneUrl('asdda','http://localhost:8000/courses/'+coursename+'/class_types/'+type+'/time_slots/'+termine+'/registration/').put().then(
-            function()
+            function(data)
             {
+              if (data.detail != undefined) {
+                alert(data.detail)
+              }
               console.log('registered:  ' +type+termine);
               $state.reload();
             },
-            function(data, status)
+            function()
             {
-              if (status==202) {
-                alert(data.details)
-              }
               console.log('Cannot register. ');
             }
         );
