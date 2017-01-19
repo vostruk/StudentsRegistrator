@@ -12,6 +12,11 @@ angular.module('apsiFrontendApp')
     $scope.studentID = null;
     $scope.newGroupID = null;
     console.log("asfd");
+    Restangular.oneUrl('coursesdd', 'http://localhost:8000/me/').get()  // Pobierz MNIE (usera)
+      .then(function(me) {
+        $scope.meMe = me;
+      });
+
     Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/').get()  // Dawaj Grupy dla zajec
 			.then(function(classGroups) {
 			  $scope.classGroups = classGroups;
@@ -105,4 +110,12 @@ angular.module('apsiFrontendApp')
       );
     };
 
+    $scope.goBack = function () {
+      if ($scope.meMe.type == 1){
+        $state.go('courseedit', {courseid: courseCode});
+      } else {
+        $state.go('studentCourse', {courseid: courseCode});
+      }
+
+    };
 	});

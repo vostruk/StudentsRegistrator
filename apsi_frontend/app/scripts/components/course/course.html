@@ -58,15 +58,23 @@
               </table>
             </td>
             <td class="text-right" >
-              <button type="button" class="btn btn-default btn-sm" ng-click="removeType(x.id)">
-                <span class="glyphicon glyphicon-remove"></span>
-              </button>
-              <button type="button" class="btn btn-default btn-sm" ng-click="editType(x.id)">
-                <span class="glyphicon glyphicon-edit"></span>
-              </button>
-              <button type="submit" class="btn btn-primary" ng-click="acceptTimeSlot(x.id)">
-                <span class="glyphicon glyphicon-ok"></span>
-              </button>
+              <div>
+                <button type="button" class="btn btn-default btn-sm" ng-click="removeType(x.id)">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+                <button type="button" class="btn btn-default btn-sm" ng-click="editType(x.id)">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </button>
+                <button type="submit" class="btn btn-primary" ng-click="acceptTimeSlot(x.id)">
+                  <span class="glyphicon glyphicon-ok"></span>
+                </button>
+              </div>
+              <div>
+                <button  type="button" class="btn btn-default" id="buttonGropus" ng-click="manageGropus(x.id)">
+                  <span class="button">Grupy</span>
+                </button>
+              </div>
+
             </td>
           </tr>
 

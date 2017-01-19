@@ -27,7 +27,7 @@ angular.module('apsiFrontendApp')
 
     $scope.registerClick = function () {
       console.log('goto registration');
-      $state.go('registerToCourse');
+      $state.go('studentCourse');
     };
 
 	});

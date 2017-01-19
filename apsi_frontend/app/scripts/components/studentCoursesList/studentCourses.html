@@ -15,7 +15,7 @@
       <td class="info">{{ x.state }}</td>
       <td class="warning">
         <div class="form-group">
-          <button ng-click='unregisterClick(x.code)' class="btn btn-default">Wyrejestrój</button>
+          <button ng-if="x.state == 0" ng-click='unregisterClick(x.code)' class="btn btn-default">Wyrejestrój</button>
           <button ng-click='detailsClick(x.code)' class="btn btn-default">Szczegóły</button>
         </div>
       </td>

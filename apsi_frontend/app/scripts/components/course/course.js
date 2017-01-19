@@ -158,6 +158,10 @@ angular.module('apsiFrontendApp')
           }
       );
     };
+    
+    $scope.manageGropus = function (typeId) {
+      $state.go('groupsManager',{courseid: courseCode, classid:typeId});
+    };
 
 
 	});
