@@ -37,19 +37,23 @@
       <div style="padding-top: 10px">
         <table class="table table-striped">
           <tr>
-            <th>Id.</th>
             <th>Opis</th>
-            <th>Grupy</th>
+            <th>Grupy dozwolone</th>
             <th>Terminy</th>
             <th  class="text-right" >Operacje</th>
           </tr>
           <tr ng-repeat="x in classType">
-            <td style="color: grey">{{x.id}}</td>
             <td>{{x.name}}</td>
             <td>{{x.group_open}}</td>
             <td>
               <table class="table table-striped">
-                <tr ng-repeat="y in x.time_slots">
+                <tr ng-if="x.time_slots_open" ng-repeat="y in x.time_slots" class="warning">
+                  <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
+                  <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
+                  <td width="10%"><span style="color: grey; ">-</span></td>
+                  <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
+                </tr>
+                <tr ng-if="!x.time_slots_open" ng-repeat="y in x.time_slots" class="success">
                   <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
                   <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
                   <td width="10%"><span style="color: grey; ">-</span></td>
@@ -64,9 +68,6 @@
                 </button>
                 <button type="button" class="btn btn-default btn-sm" ng-click="editType(x.id)">
                   <span class="glyphicon glyphicon-edit"></span>
-                </button>
-                <button type="submit" class="btn btn-primary" ng-click="acceptTimeSlot(x.id)">
-                  <span class="glyphicon glyphicon-ok"></span>
                 </button>
               </div>
               <div>

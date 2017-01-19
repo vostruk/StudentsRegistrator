@@ -215,7 +215,7 @@ angular.module('apsiFrontendApp').run(function( $rootScope, $state, AuthService,
         {
            $state.go('login');
         }
-      }
+      };
     
 
       $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {

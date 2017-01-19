@@ -60,6 +60,8 @@ angular.module('apsiFrontendApp')
         function()
         {
           console.log('Cannot create Group.');
+          $scope.newGroupVisible = 'hidden';
+          alert('Nie mozna utworzyć grupy');
         }
       );
     };
@@ -78,10 +80,14 @@ angular.module('apsiFrontendApp')
 
     $scope.signToGroup = function (groupId) {
       Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/groups/'+groupId+'/register/').put()
-        .then(function() {
-          console.log(groupId+' register');
-          $state.reload();
-      });
+        .then(
+          function() {
+            console.log(groupId+' register');
+            $state.reload();
+          },
+          function () {
+            alert('Nie mozna zapisać się do grupy');
+          });
     };
 
     $scope.removeGroup = function () {
