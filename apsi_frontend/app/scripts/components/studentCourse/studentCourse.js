@@ -86,14 +86,19 @@ angular.module('apsiFrontendApp')
       Restangular.oneUrl('asdda','http://localhost:8000/courses/'+coursename+'/class_types/'+type+'/time_slots/'+termine+'/registration/').put().then(
             function(data)
             {
-              if (data.detail != undefined) {
-                alert(data.detail)
+              console.log(data);
+              if(data != undefined) {
+                if ( data.detail != undefined) {
+                  console.log(data.detail);
+                  alert(data.detail)
+                }
               }
               console.log('registered:  ' +type+termine);
               $state.reload();
             },
             function()
             {
+              alert("Zapis nieudany. Przekroczona maksymalną liczbę studentów.");
               console.log('Cannot register. ');
             }
         );
