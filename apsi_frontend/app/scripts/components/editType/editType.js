@@ -9,7 +9,7 @@ angular.module('apsiFrontendApp')
     $scope.week = [
       {
         id: 0,
-        name: 'Poniedzialek'
+        name: 'Poniedziałek'
       },
       {
         id: 1,
@@ -17,7 +17,7 @@ angular.module('apsiFrontendApp')
       },
       {
         id: 2,
-        name: 'Sroda'
+        name: 'Środa'
       },
       {
         id: 3,
@@ -25,7 +25,7 @@ angular.module('apsiFrontendApp')
       },
       {
         id: 4,
-        name: 'Piatek'
+        name: 'Piątek'
       }
     ];
 
@@ -150,4 +150,29 @@ angular.module('apsiFrontendApp')
           $state.reload();
       });
     };
+
+    $scope.acceptTimeSlot = function() {
+ 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/time_slots/close/').put().then(
+            function() {
+                console.log('Accepted time slot');
+                $state.reload()
+            },
+            function() {
+                console.log('Cannot accept time slot');
+            }
+        );
+    };
+
+    $scope.openTimeSlot = function() {
+ 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+coursename+'/class_types/'+typeId+'/time_slots/open/').put().then(
+            function() {
+                console.log('Accepted time slot');
+                $state.reload()
+            },
+            function() {
+                console.log('Cannot accept time slot');
+            }
+        );
+    };
+
 	});

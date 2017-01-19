@@ -11,6 +11,13 @@ angular.module('apsiFrontendApp')
       .then(function(toRegister) {
         console.log(toRegister);
         $scope.records = toRegister;
+        for (var i = 0; i < $scope.records.length; i++) {
+           if ($scope.records[i].state === 0){
+             $scope.records[i].state = "Otwarta";
+           } else {
+             $scope.records[i].state = "Zamknieta";
+           }
+        }
     });
 
 

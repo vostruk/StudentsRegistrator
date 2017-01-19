@@ -10,6 +10,13 @@ angular.module('apsiFrontendApp')
 		$http.get('http://localhost:8000/courses/?registered=true').then(function (response) {
         console.log(response.data);
         $scope.records = response.data;
+        for (var i = 0; i < response.data.length; i++) {
+           if ($scope.records[i].state === 0){
+             $scope.records[i].state = "Otwarta";
+           } else {
+             $scope.records[i].state = "Zamknieta";
+           }
+        }
       });
 
     $scope.unregisterClick = function (id) {
@@ -27,7 +34,7 @@ angular.module('apsiFrontendApp')
 
     $scope.registerClick = function () {
       console.log('goto registration');
-      $state.go('studentCourse');
+      $state.go('registerToCourse');
     };
 
 	});

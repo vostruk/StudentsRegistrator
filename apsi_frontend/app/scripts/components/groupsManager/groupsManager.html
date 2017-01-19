@@ -4,7 +4,7 @@
       <div ng-if="!isMyGroup">
         <h2>Grupy przedmiotu: {{courseCode}}</h2>
         <div style="padding-top: 10px">
-          <button ng-if="meMe.type != 1" type="submit" class="btn btn-primary" ng-click="createGroup()">Utwórz Grupę</button>
+          <button ng-if="meMe.type != 1 && thisClass.group_open" type="submit" class="btn btn-primary" ng-click="createGroup()">Utwórz Grupę</button>
         </div>
         <div class="form-group" style="padding-top: 10px; visibility: {{newGroupVisible}}">
 				  <label for="nameInput">Nazwa Grupy:</label>
@@ -18,7 +18,7 @@
               <th>Nazwa</th>
               <th>Twórca</th>
               <th>Skład</th>
-              <th class="text-right" >Operacja</th>
+              <th ng-if="meMe.type != 1" class="text-right" >Operacja</th>
             </tr>
             <tr ng-repeat="y in classGroups">
               <td>{{y.id}}</td>
@@ -32,8 +32,8 @@
                   </tr>
                 </table>
               </td>
-              <td class="text-right">
-                  <button  ng-if="!y.registered" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="signToGroup(y.id)">
+              <td ng-if="meMe.type != 1" class="text-right">
+                  <button  ng-if="!y.registered && thisClass.group_open" type="button" class="btn btn-default btn-sm" id="buttonSign" ng-click="signToGroup(y.id)">
                     <span class="glyphicon glyphicon-edit"></span>
                   </button>
               </td>

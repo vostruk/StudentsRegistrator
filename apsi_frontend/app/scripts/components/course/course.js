@@ -46,7 +46,12 @@ angular.module('apsiFrontendApp')
         console.log('types: '+classType);
         $scope.classType = classType;
         for (var i=0; i < classType.length; i++) {
-          $scope.classType[i].time_slots = dayFormat-($scope.classType[i].time_slots);
+          $scope.classType[i].time_slots = dayFormat($scope.classType[i].time_slots);
+          if($scope.classType[i].group_open === true) {
+            $scope.classType[i].group_open = 'tak';
+          } else {
+            $scope.classType[i].group_open = 'nie';
+          }
         }
 	 	});
 
@@ -69,11 +74,7 @@ angular.module('apsiFrontendApp')
     Restangular.oneUrl('courses', 'http://localhost:8000/courses/'+courseCode+'/').get()  // GET: /courses/{name}
 			.then(function(course) {
 			  $scope.courseDesc = course;
-        if (course.state == 0) {
-          $scope.isOpened = true;
-        } else {
-          $scope.isOpened = false;
-        }
+        $scope.isOpened = course.state == 0;
         courseData = $scope.courseDesc;
         Restangular.oneUrl('coursesdd', 'http://localhost:8000/tutors/').get()  // GET: /courses/{name}
           .then(function(tutors) {
@@ -127,17 +128,7 @@ angular.module('apsiFrontendApp')
       $state.go('coursesDispl');
     };
 
-    $scope.acceptTimeSlot = function(typeId, slotId) {
- 	    Restangular.oneUrl('acceptTimeSlot', 'http://localhost:8000/courses/'+$scope.courseDesc.code+'/class_types/'+typeId+'/time_slots/close/').put().then(
-            function() {
-                console.log('Accepted time slot');
-                $state.reload()
-            },
-            function() {
-                console.log('Cannot accept time slot');
-            }
-        );
-    };
+    
 
     $scope.createType = function() {
       $state.go('createType', {courseid: courseCode});
@@ -160,7 +151,7 @@ angular.module('apsiFrontendApp')
           }
       );
     };
-    
+
     $scope.manageGropus = function (typeId) {
       $state.go('groupsManager',{courseid: courseCode, classid:typeId});
     };

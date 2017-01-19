@@ -9,6 +9,13 @@ angular.module('apsiFrontendApp')
     $http.get('http://localhost:8000/courses/?tutored=true').then(function (response) {
         console.log(response.data);
         $scope.records = response.data;
+        for (var i = 0; i < response.data.length; i++) {
+           if ($scope.records[i].state === 0){
+             $scope.records[i].state = "Otwarta";
+           } else {
+             $scope.records[i].state = "Zamknieta";
+           }
+        }
     });
 
 
