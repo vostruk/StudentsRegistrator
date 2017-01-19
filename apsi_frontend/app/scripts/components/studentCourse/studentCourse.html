@@ -20,12 +20,14 @@
           <tr>
             <th>Id.</th>
             <th>Opis</th>
-            <th>Terminy</th>
             <th>Grupy</th>
+            <th>Terminy</th>
+            <th>Opcje</th>
           </tr>
           <tr ng-repeat="x in classType">
             <td style="color: grey">{{x.id}}</td>
             <td>{{x.name}}</td>
+            <td>{{x.group_open}}</td>
             <td>
               <table class="table table-striped">
                 <tr ng-repeat="y in x.time_slots">

@@ -12,6 +12,12 @@ angular.module('apsiFrontendApp')
     $scope.studentID = null;
     $scope.newGroupID = null;
     console.log("asfd");
+
+    Restangular.oneUrl('coursesdd', 'http://localhost:8000/courses/'+courseCode+'/class_types/'+typeId+'/').get()  // Pobierz MNIE (usera)
+      .then(function(thisClass) {
+        $scope.thisClass = thisClass;
+      });
+
     Restangular.oneUrl('coursesdd', 'http://localhost:8000/me/').get()  // Pobierz MNIE (usera)
       .then(function(me) {
         $scope.meMe = me;

@@ -51,6 +51,12 @@ angular.module('apsiFrontendApp')
             $scope.classType = classType;
             for (var i=0; i < classType.length; i++) {
               $scope.classType[i].time_slots = dayFormat($scope.classType[i].time_slots);
+              if($scope.classType[i].group_open == true) {
+                $scope.classType[i].group_open = 'Dozwolone.';
+              } else {
+                $scope.classType[i].group_open = 'Zabronione.'
+              }
+
             }
         });
     });
