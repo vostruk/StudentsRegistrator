@@ -36,10 +36,11 @@ class RegisteredStudentsSerializer(serializers.Serializer):
 
 class TimeSlotSerializer(serializers.ModelSerializer):
     enrolled = serializers.SerializerMethodField()
+    enrolled_students = UserSerializer(many=True, read_only=True)
 
     class Meta(object):
         model = TimeSlot
-        fields = ('id', 'day', 'time_start', 'time_end', 'enrolled', 'max_students_enrolled')
+        fields = ('id', 'day', 'time_start', 'time_end', 'enrolled', 'max_students_enrolled', 'enrolled_students')
     
     def validate(self, data):
         """
