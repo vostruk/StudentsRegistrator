@@ -42,22 +42,25 @@
             <th>Terminy</th>
             <th  class="text-right" >Operacje</th>
           </tr>
-          <tr ng-repeat="x in classType">
+          <tr ng-repeat="x in classType" align="center">
             <td>{{x.name}}</td>
             <td>{{x.group_open}}</td>
+
             <td>
               <table class="table table-striped">
-                <tr ng-if="x.time_slots_open" ng-repeat="y in x.time_slots" class="warning">
-                  <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
+                <tr ng-if="x.time_slots_open" ng-repeat="y in x.time_slots" class="warning" >
+                  <td width="30%" ><span style="color: grey; ">{{y.day}}</span></td>
                   <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
                   <td width="10%"><span style="color: grey; ">-</span></td>
                   <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
+
                 </tr>
                 <tr ng-if="!x.time_slots_open" ng-repeat="y in x.time_slots" class="success">
-                  <td width="50%" ><span style="color: grey; ">{{y.day}}</span></td>
+                  <td width="30%" ><span style="color: grey; ">{{y.day}}</span></td>
                   <td width="20%"><span style="color: grey; ">{{y.time_start}}</span></td>
                   <td width="10%"><span style="color: grey; ">-</span></td>
                   <td width="20%"><span style="color: grey; ">{{y.time_end}}</span></td>
+
                 </tr>
               </table>
             </td>

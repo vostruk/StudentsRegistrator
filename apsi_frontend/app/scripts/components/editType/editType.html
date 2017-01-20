@@ -45,12 +45,20 @@
             <th>Dzień</th>
             <th>Od</th>
             <th>Do</th>
+            <th>Zapisani</th>
             <th class="text-right" >Operacje</th>
           </tr>
           <tr ng-repeat="y in termines">
             <td>{{y.day}}</td>
             <td>{{y.time_start}}</td>
             <td>{{y.time_end}}</td>
+            <td>
+              <table class="table table-striped">
+                <tr ng-repeat="z in y.enrolled_students">
+                  <td><span style="color: grey; ">{{z.full_name}}</span></td>
+                </tr>
+              </table>
+            </td>
             <td class="text-right" >
               <button type="button" class="btn btn-default btn-sm" ng-click="removeTermine(y.id)">
                 <span class="glyphicon glyphicon-remove"></span>
