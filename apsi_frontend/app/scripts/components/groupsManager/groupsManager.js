@@ -103,8 +103,15 @@ angular.module('apsiFrontendApp')
             console.log('Group deleted');
             $state.reload();
           },
-          function ()
+          function (data)
           {
+            data = data.data
+            if(data != undefined) {
+                if (data.detail != undefined) {
+                  console.log(data.detail);
+                  alert(data.detail)
+                }
+            }
             console.log('remove fail.');
           }
       );

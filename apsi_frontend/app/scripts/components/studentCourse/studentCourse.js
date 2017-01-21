@@ -8,7 +8,7 @@ angular.module('apsiFrontendApp')
     $scope.week = [
       {
         id: 0,
-        name: 'Poniedzialek'
+        name: 'Poniedziałek'
       },
       {
         id: 1,
@@ -16,7 +16,7 @@ angular.module('apsiFrontendApp')
       },
       {
         id: 2,
-        name: 'Sroda'
+        name: 'Środa'
       },
       {
         id: 3,
@@ -24,7 +24,7 @@ angular.module('apsiFrontendApp')
       },
       {
         id: 4,
-        name: 'Piatek'
+        name: 'Piątek'
       }
     ];
 
@@ -104,7 +104,7 @@ angular.module('apsiFrontendApp')
             },
             function()
             {
-              alert("Zapis nieudany. Przekroczona maksymalną liczbę studentów.");
+              alert("Zapis nieudany. Przekroczona maksymalną liczbę studentów lub zapisy są już zamnknięte.");
               console.log('Cannot register. ');
             }
         );

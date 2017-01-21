@@ -164,22 +164,21 @@ class CourseViewSet(ModelViewSet):
         if request.method == 'PUT':
             course.registered_students.add(user)
         if request.method == 'DELETE':
-            for cl in ClassType.objects.filter(course=course):
-                gr=Group.objects.filter(class_type=cl).filter(student_members=user)
-                if gr:
-                    if gr.first().creator == user:
-                        if gr.first().student_members.count()>1:
-                            return Response(
-                                status=status.HTTP_400_BAD_REQUEST,
-                                data={'detail': 'W grupie ktora stworzylesz sa inne studenci. Nie mozemy cie usunac z przedmiotu'}
-                            )
-                        else:
-                            gr.delete()
+            for group in Group.objects.filter(class_type__course=course, student_members=user):
+                if group.creator == user:
+                    if group.student_members.count() > 1:
+                        return Response(
+                            status=status.HTTP_400_BAD_REQUEST,
+                            data={
+                                'detail': 'W stworzonej przez ciebie groupupie są inni studenci. Nie może się wyrejestrować z przedmiotu.'}
+                        )
                     else:
-                        gr.first().student_members.remove(user)
-                ts = TimeSlot.objects.filter(class_type=cl).filter(enrolled_students=user)
-                if ts:
-                    ts.first().enrolled_students.remove(user)
+                        group.delete()
+                else:
+                    group.student_members.remove(user)
+            
+            for time_slot in TimeSlot.objects.filter(class_type__course=course, enrolled_students=user):
+                time_slot.enrolled_students.remove(user)
             course.registered_students.remove(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -197,6 +196,15 @@ class RegisteredStudentsViewSet(ListModelMixin, GenericViewSet):
 
     def destroy(self, request, *args, **kwargs):
         student = self.get_object()
+        course = Course.objects.get(pk=kwargs['course_pk'])
+        for group in Group.objects.filter(class_type__course=course, student_members=student):
+            if group.creator == student:
+                group.delete()
+            else:
+                group.student_members.remove(student)
+
+        for time_slot in TimeSlot.objects.filter(class_type__course=course, enrolled_students=student):
+            time_slot.enrolled_students.remove(student)
         student.courses_attended.remove(self.kwargs['course_pk'])
         return Response(status=status.HTTP_204_NO_CONTENT)
 

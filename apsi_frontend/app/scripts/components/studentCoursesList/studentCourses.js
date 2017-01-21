@@ -24,6 +24,17 @@ angular.module('apsiFrontendApp')
         .then(function() {
           console.log(id+' redirect to unregister');
           $state.reload();
+      },
+      function(data)
+      {
+          data = data.data
+          if(data != undefined) {
+              if (data.detail != undefined) {
+                console.log(data.detail);
+                alert(data.detail)
+              }
+          }
+        console.log('Cannot register. ');
       });
     };
 
