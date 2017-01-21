@@ -9,6 +9,7 @@ from rest_framework.mixins import ListModelMixin
 from rest_framework.exceptions import APIException
 from django.core.exceptions import ValidationError
 from courses.exceptions import RegistrationClosedError
+from courses.exceptions import GroupRegistrationClosedError
 from courses.exceptions import MaxNumberRegisteredError
 from courses.serializers import (
     ClassTypeSerializer,
@@ -163,6 +164,22 @@ class CourseViewSet(ModelViewSet):
         if request.method == 'PUT':
             course.registered_students.add(user)
         if request.method == 'DELETE':
+            for cl in ClassType.objects.filter(course=course):
+                gr=Group.objects.filter(class_type=cl).filter(student_members=user)
+                if gr:
+                    if gr.first().creator == user:
+                        if gr.first().student_members.count()>1:
+                            return Response(
+                                status=status.HTTP_400_BAD_REQUEST,
+                                data={'detail': 'W grupie ktora stworzylesz sa inne studenci. Nie mozemy cie usunac z przedmiotu'}
+                            )
+                        else:
+                            gr.delete()
+                    else:
+                        gr.first().student_members.remove(user)
+                ts = TimeSlot.objects.filter(class_type=cl).filter(enrolled_students=user)
+                if ts:
+                    ts.first().enrolled_students.remove(user)
             course.registered_students.remove(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -254,9 +271,17 @@ class TimeSlotViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
                 data={'detail': 'user should be student'}
             )
+
+        if time_slot.class_type.time_slots_state == ClassType.TimeSlotsState.TIMESLOTS_REGISTRATION_CLOSED:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                data={'detail': 'Prowadzący zaakceptował terminy. Nie możesz ich zmienić'}
+            )
+            
         if request.method == 'PUT':
-            collision_time_slots = TimeSlot.objects.filter(enrolled_students = user)
+            collision_time_slots = TimeSlot.objects.filter(enrolled_students = user).exclude(class_type=time_slot.class_type)
             collided = list()
+            #courseName = time_slot.class_type.course.name
             for ts in collision_time_slots:
                 if (ts.time_start>=time_slot.time_start and ts.time_start<time_slot.time_end) or (ts.time_end>time_slot.time_start and ts.time_end<=time_slot.time_end):
                     collided.append((ts.class_type.name, ts.time_start, ts.time_end))
@@ -267,9 +292,12 @@ class TimeSlotViewSet(ModelViewSet):
                 previous_user_slot.first().enrolled_students.remove(user)
             time_slot.enrolled_students.add(user)
             if collided:
+                strRepresent = "Masz kolizje terminów przy zapisie na ten termin:\n"
+                for t in collided:
+                    strRepresent += t[0] + "\n  - od " + str(t[1]) + "  do " + str(t[2]) +"\n"
                 return Response(
                     status=status.HTTP_202_ACCEPTED,
-                    data={'detail': 'Masz kolizje terminów przy zapisie na ten termin: '+ str(collided)}
+                    data={'detail': strRepresent}
                 )
 
         if request.method == 'DELETE':
@@ -369,6 +397,8 @@ class GroupsViewSet(ModelViewSet):
     def perform_destroy(self, instance):
         if instance.creator != self.request.user:
             raise Http404
+        if instance.class_type.groups_state == ClassType.GroupsState.GROUPS_REGISTRATION_CLOSED:
+            raise GroupRegistrationClosedError()
         instance.delete()
 
     @detail_route(['PUT'], permission_classes=[StudentsOnlyPermissions])
