@@ -40,13 +40,16 @@ class ClassType(models.Model):
     class GroupsState:
         GROUPS_REGISTRATION_OPEN = 0
         GROUPS_REGISTRATION_CLOSED = 1
+
     GROUPS_STATE_CHOICES = (
         (GroupsState.GROUPS_REGISTRATION_OPEN, 'Rejestracja grup otwarta'),
         (GroupsState.GROUPS_REGISTRATION_CLOSED, 'Rejestracja grup zamknięta'),
     )
+
     class TimeSlotsState:
         TIMESLOTS_REGISTRATION_OPEN = 0
         TIMESLOTS_REGISTRATION_CLOSED = 1
+
     TIMESLOT_STATE_CHOICES = (
         (TimeSlotsState.TIMESLOTS_REGISTRATION_OPEN, 'Rejestracja na terminy otwarta'),
         (TimeSlotsState.TIMESLOTS_REGISTRATION_CLOSED, 'Rejestracja na terminy zamknięta'),
@@ -65,9 +68,8 @@ class ClassType(models.Model):
     )
     max_students_in_group = models.IntegerField()
 
+
 class Group(models.Model):
-    class_type = models.ForeignKey(ClassType)
-    student_members = models.ManyToManyField(User)
     name = models.CharField(max_length=50)
     creator = models.ForeignKey(
         User,
@@ -80,6 +82,7 @@ class Group(models.Model):
         User,
         related_name='attended_groups',
     )
+
 
 class TimeSlot(models.Model):
     class Day:
