@@ -58,12 +58,13 @@ angular.module('apsiFrontendApp')
           }
         );
 
-    Restangular.oneUrl('asd','http://localhost:8000/students/').get()
+    Restangular.oneUrl('asd','http://localhost:8000/courses/'+coursename+'/registered_students/').get()
         .then( function(students) {
-            console.log('Get student list');
+            console.log('Get student list in this course');
             $scope.students = students;
           }
         );
+
 
     $scope.goBack = function() {
       $state.go('courseedit', {courseid: coursename});
@@ -94,6 +95,7 @@ angular.module('apsiFrontendApp')
             },
             function()
             {
+              alert('Wystąpił błąd podczas przenoszenia');
               console.log('Cannot move student. ' );
             }
         );

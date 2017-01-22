@@ -18,7 +18,9 @@
         <select style="display: inline-block" ng-model="studentID">
           <option ng-repeat="student in students" value="{{ student.id }}">{{ student.username }}</option>
         </select>
-        <input style="width: 150px; display: inline-block;" type="text" class="form-control" id="groupNumber" placeholder="Numer grupy" ng-model="groupNumber">
+        <select style="display: inline-block" ng-model="groupNumber">
+          <option ng-repeat="group in classType.groups" value="{{ group.id }}">{{ group.name }}</option>
+        </select>
         <button type="button" class="btn btn-primary" ng-click="moveStudent()">Zmień</button>
       </div>
       <div style="padding-top: 50px">

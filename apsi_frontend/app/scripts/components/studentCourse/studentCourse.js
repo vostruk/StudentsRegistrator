@@ -93,8 +93,8 @@ angular.module('apsiFrontendApp')
             function(data)
             {
               console.log(data);
-              if(data != undefined) {
-                if ( data.detail != undefined) {
+              if (data != undefined) {
+                if (data.detail != undefined) {
                   console.log(data.detail);
                   alert(data.detail)
                 }
@@ -102,9 +102,16 @@ angular.module('apsiFrontendApp')
               console.log('registered:  ' +type+termine);
               $state.reload();
             },
-            function()
+            function(error)
             {
-              alert("Zapis nieudany. Przekroczona maksymalną liczbę studentów lub zapisy są już zamnknięte.");
+              if (error.data != undefined) {
+                if (error.data.detail != undefined) {
+                  console.log(error.data.detail);
+                  alert(error.data.detail)
+                }
+              } else {
+                alert('Zapis nieudany. Przekroczona maksymalną liczbę studentów lub zapisy są już zamnknięte.');
+              }
               console.log('Cannot register. ');
             }
         );
